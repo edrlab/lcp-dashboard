@@ -57,6 +57,25 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Dashboard specific colors
+        "dashboard-header": "hsl(var(--dashboard-header))",
+        "stat-card": "hsl(var(--stat-card))",
+        "stat-border": "hsl(var(--stat-border))",
+        "chart-primary": "hsl(var(--chart-primary))",
+        "chart-secondary": "hsl(var(--chart-secondary))",
+        success: "hsl(var(--success))",
+        warning: "hsl(var(--warning))",
+      },
+      backgroundImage: {
+        "gradient-primary": "var(--gradient-primary)",
+        "gradient-card": "var(--gradient-card)",
+      },
+      boxShadow: {
+        "card": "var(--shadow-card)",
+        "dashboard": "var(--shadow-lg)",
+      },
+      transitionTimingFunction: {
+        "smooth": "var(--transition-smooth)",
       },
       borderRadius: {
         lg: "var(--radius)",

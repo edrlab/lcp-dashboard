@@ -8,6 +8,7 @@ export default function Dashboard() {
   // Mock data - in real app this would come from API
   const dashboardData = {
     totalPublications: 2866,
+    totalUsers: 102,
     licensesLast12Months: 15847,
     licensesLastWeek: 147,
     oldestLicenseDate: "March 15, 2019",
@@ -28,18 +29,27 @@ export default function Dashboard() {
             className="lg:col-span-1"
           />
           
+          {/* Total Users */}
+          <StatCard
+            title="Total Users"
+            value={dashboardData.totalUsers}
+            className="lg:col-span-1"
+          />
+          
           {/* Publication Breakdown */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-2">
             <PublicationBreakdown />
           </div>
-          
-          {/* License Metrics */}
+        </div>
+
+        {/* License Metrics */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <StatCard
             title="Last 12 months"
             value={dashboardData.licensesLast12Months}
             subtitle="licenses generated"
             trend="up"
-            className="lg:col-span-1"
+            className="lg:col-span-2"
           />
           
           <StatCard
@@ -47,7 +57,7 @@ export default function Dashboard() {
             value={dashboardData.licensesLastWeek}
             subtitle="licenses generated"
             trend="up"
-            className="lg:col-span-1"
+            className="lg:col-span-2"
           />
         </div>
 

@@ -3,6 +3,7 @@ import { DashboardFooter } from "@/components/dashboard/DashboardFooter";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { LicenseChart } from "@/components/dashboard/LicenseChart";
 import { PublicationBreakdown } from "@/components/dashboard/PublicationBreakdown";
+import { LicenseStatusBreakdown } from "@/components/dashboard/LicenseStatusBreakdown";
 
 export default function Dashboard() {
   // Mock data - in real app this would come from API
@@ -57,6 +58,11 @@ export default function Dashboard() {
         {/* Publication Breakdown */}
         <div className="mb-8">
           <PublicationBreakdown />
+        </div>
+
+        {/* License Status Breakdown */}
+        <div className="mb-8">
+          <LicenseStatusBreakdown />
         </div>
 
         {/* License Trends Chart */}

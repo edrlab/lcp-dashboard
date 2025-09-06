@@ -55,13 +55,9 @@ export default function Dashboard() {
           />
         </div>
 
-        {/* Publication Breakdown */}
-        <div className="mb-8">
+        {/* Breakdown Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <PublicationBreakdown />
-        </div>
-
-        {/* License Status Breakdown */}
-        <div className="mb-8">
           <LicenseStatusBreakdown />
         </div>
 

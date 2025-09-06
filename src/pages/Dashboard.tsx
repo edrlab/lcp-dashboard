@@ -20,7 +20,7 @@ export default function Dashboard() {
       <DashboardHeader />
       
       <main className="container mx-auto px-6 py-8">
-        {/* Main Dashboard Grid */}
+        {/* Stats Row */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {/* Total Publications */}
           <StatCard
@@ -36,20 +36,13 @@ export default function Dashboard() {
             className="lg:col-span-1"
           />
           
-          {/* Publication Breakdown */}
-          <div className="lg:col-span-2">
-            <PublicationBreakdown />
-          </div>
-        </div>
-
-        {/* License Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {/* License Metrics */}
           <StatCard
             title="Last 12 months"
             value={dashboardData.licensesLast12Months}
             subtitle="licenses generated"
             trend="up"
-            className="lg:col-span-2"
+            className="lg:col-span-1"
           />
           
           <StatCard
@@ -57,8 +50,13 @@ export default function Dashboard() {
             value={dashboardData.licensesLastWeek}
             subtitle="licenses generated"
             trend="up"
-            className="lg:col-span-2"
+            className="lg:col-span-1"
           />
+        </div>
+
+        {/* Publication Breakdown */}
+        <div className="mb-8">
+          <PublicationBreakdown />
         </div>
 
         {/* License Trends Chart */}

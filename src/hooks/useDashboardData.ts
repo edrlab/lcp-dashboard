@@ -10,8 +10,15 @@ export interface DashboardData {
 }
 
 const fetchDashboardData = async (): Promise<DashboardData> => {
+  const token = localStorage.getItem('auth_token');
+  
   // Replace with your actual API endpoint
-  const response = await fetch('/api/dashboard');
+  const response = await fetch('/api/dashboard', {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
   
   if (!response.ok) {
     throw new Error('Failed to fetch dashboard data');

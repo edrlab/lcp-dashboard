@@ -1,4 +1,22 @@
 import { useQuery } from '@tanstack/react-query';
+import { apiService } from '@/lib/apiService';
+import { API_CONFIG } from '@/lib/api';
+import { mockDashboardData } from '@/lib/mockData';
+
+export interface PublicationType {
+  name: string;
+  count: number;
+}
+
+export interface LicenseStatus {
+  name: string;
+  count: number;
+}
+
+export interface ChartDataPoint {
+  month: string;
+  licenses: number;
+}
 
 export interface DashboardData {
   totalPublications: number;
@@ -7,29 +25,25 @@ export interface DashboardData {
   licensesLastWeek: number;
   oldestLicenseDate: string;
   totalLicensesSinceStart: number;
+  publicationTypes: PublicationType[];
+  licenseStatuses: LicenseStatus[];
+  chartData: ChartDataPoint[];
 }
 
 const fetchDashboardData = async (): Promise<DashboardData> => {
-  const token = localStorage.getItem('auth_token');
-  
-  // Replace with your actual API endpoint
-  const response = await fetch('/api/dashboard', {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
-  
-  if (!response.ok) {
-    throw new Error('Failed to fetch dashboard data');
+  // Use mock data if the flag is set
+  if (typeof __USE_MOCK_DATA__ !== 'undefined' && __USE_MOCK_DATA__) {
+    // Simulate API delay for realistic development experience
+    await new Promise(resolve => setTimeout(resolve, 500));
+    return mockDashboardData;
   }
   
-  return response.json();
+  return apiService.get<DashboardData>(API_CONFIG.ENDPOINTS.DASHBOARD);
 };
 
 export const useDashboardData = () => {
   return useQuery({
-    queryKey: ['dashboard'],
+    queryKey: ['dashboard', __USE_MOCK_DATA__ ? 'mock' : 'api'],
     queryFn: fetchDashboardData,
     staleTime: 5 * 60 * 1000, // 5 minutes
     refetchOnWindowFocus: false,

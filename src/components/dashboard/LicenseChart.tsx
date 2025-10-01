@@ -1,23 +1,34 @@
 import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-
-// Mock data for the chart
-const chartData = [
-  { month: "Jan", licenses: 245 },
-  { month: "Feb", licenses: 312 },
-  { month: "Mar", licenses: 198 },
-  { month: "Apr", licenses: 427 },
-  { month: "May", licenses: 389 },
-  { month: "Jun", licenses: 516 },
-  { month: "Jul", licenses: 634 },
-  { month: "Aug", licenses: 573 },
-  { month: "Sep", licenses: 692 },
-  { month: "Oct", licenses: 758 },
-  { month: "Nov", licenses: 841 },
-  { month: "Dec", licenses: 923 },
-];
+import { useDashboardData } from "@/hooks/useDashboardData";
 
 export function LicenseChart() {
+  const { data: dashboardData, isLoading, error } = useDashboardData();
+
+  if (isLoading) {
+    return (
+      <Card className="p-6 bg-gradient-card border-stat-border col-span-full">
+        <div className="space-y-4">
+          <Skeleton className="h-6 w-48" />
+          <Skeleton className="h-80 w-full" />
+        </div>
+      </Card>
+    );
+  }
+
+  if (error || !dashboardData?.chartData) {
+    return (
+      <Card className="p-6 bg-gradient-card border-stat-border col-span-full">
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-foreground">License Generation Trends</h3>
+          <p className="text-muted-foreground">Failed to load chart data</p>
+        </div>
+      </Card>
+    );
+  }
+
+  const chartData = dashboardData.chartData;
   return (
     <Card className="p-6 bg-gradient-card border-stat-border col-span-full">
       <div className="space-y-4">

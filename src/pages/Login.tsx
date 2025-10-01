@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,18 +9,29 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, AlertCircle } from 'lucide-react';
 
 export default function Login() {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const { login, user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // If user types /login directly in URL, redirect to home
+  // But allow normal navigation from the app (when coming from /)
+  useEffect(() => {
+    // Check if user came from a direct URL access (no referrer from within the app)
+    if (!location.state?.fromApp) {
+      navigate('/', { replace: true });
+      return;
+    }
+  }, [navigate, location]);
 
   // Redirect if already logged in
   useEffect(() => {
     if (user) {
-      navigate('/dashboard');
+      navigate('/');
     }
   }, [user, navigate]);
 
@@ -29,13 +40,13 @@ export default function Login() {
     setError('');
     setIsSubmitting(true);
 
-    if (!email || !password) {
+    if (!username || !password) {
       setError('Please fill in all fields');
       setIsSubmitting(false);
       return;
     }
 
-    const result = await login(email, password);
+    const result = await login(username, password);
     
     if (result.success) {
       navigate('/dashboard');
@@ -65,14 +76,16 @@ export default function Login() {
             )}
             
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="username">Username</Label>
               <Input
-                id="email"
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                id="username"
+                name="username"
+                type="text"
+                placeholder="Enter your username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 disabled={isSubmitting}
+                autoComplete="username"
                 required
               />
             </div>
@@ -81,11 +94,13 @@ export default function Login() {
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
+                name="password"
                 type="password"
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={isSubmitting}
+                autoComplete="current-password"
                 required
               />
             </div>

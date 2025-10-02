@@ -183,8 +183,8 @@ export default function OversharedLicenses() {
                     <Button
                       onClick={() => handleRevoke(license.id)}
                       disabled={processingLicenses.has(license.id)}
-                      variant={license.status === "active" ? "destructive" : "secondary"}
-                      className="min-w-[100px]"
+                      variant={license.status === "active" ? "destructive" : "outline"}
+                      className={`min-w-[100px] ${license.status === "ready" ? "bg-muted/50 text-muted-foreground border-muted hover:bg-muted/70" : ""}`}
                     >
                       {processingLicenses.has(license.id) 
                         ? "Processing..." 

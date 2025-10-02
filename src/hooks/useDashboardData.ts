@@ -18,13 +18,26 @@ export interface ChartDataPoint {
   licenses: number;
 }
 
+export interface OversharedLicense {
+  id: string;
+  title: string;
+  user: string;
+  type: "loan" | "buy";
+  status: "ready" | "active" | "expired";
+  devices: number;
+}
+
 export interface DashboardData {
   totalPublications: number;
   totalUsers: number;
+  totalLicenses: number;
   licensesLast12Months: number;
+  licensesLastMonth: number;
   licensesLastWeek: number;
+  licensesLastDay: number;
   oldestLicenseDate: string;
   totalLicensesSinceStart: number;
+  oversharedLicensesCount: number;
   publicationTypes: PublicationType[];
   licenseStatuses: LicenseStatus[];
   chartData: ChartDataPoint[];

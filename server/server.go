@@ -44,6 +44,8 @@ func main() {
 	r.Group(func(r chi.Router) {
 		r.Use(authMiddleware)
 		r.Get("/dashboard/data", Dashboard)
+		r.Get("/dashboard/overshared-licenses", OversharedLicenses)
+		r.Put("/revoke/{licenseID}", RevokeLicense)
 	})
 
 	// Démarre le serveur sur le port 8080
@@ -161,24 +163,32 @@ func Dashboard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	type DashboardData struct {
-		TotalPublications       int               `json:"totalPublications"`
-		TotalUsers              int               `json:"totalUsers"`
-		LicensesLast12Months    int               `json:"licensesLast12Months"`
-		LicensesLastWeek        int               `json:"licensesLastWeek"`
-		OldestLicenseDate       string            `json:"oldestLicenseDate"`
-		TotalLicensesSinceStart int               `json:"totalLicensesSinceStart"`
-		PublicationTypes        []PublicationType `json:"publicationTypes"`
-		LicenseStatuses         []LicenseStatus   `json:"licenseStatuses"`
-		ChartData               []ChartDataPoint  `json:"chartData"`
+		TotalPublications        int               `json:"totalPublications"`
+		TotalUsers               int               `json:"totalUsers"`
+		TotalLicenses            int               `json:"totalLicenses"`
+		LicensesLast12Months     int               `json:"licensesLast12Months"`
+		LicensesLastMonth        int               `json:"licensesLastMonth"`
+		LicensesLastWeek         int               `json:"licensesLastWeek"`
+		LicensesLastDay          int               `json:"licensesLastDay"`
+		OldestLicenseDate        string            `json:"oldestLicenseDate"`
+		TotalLicensesSinceStart  int               `json:"totalLicensesSinceStart"`
+		OversharedLicensesCount  int               `json:"oversharedLicensesCount"`
+		PublicationTypes         []PublicationType `json:"publicationTypes"`
+		LicenseStatuses          []LicenseStatus   `json:"licenseStatuses"`
+		ChartData                []ChartDataPoint  `json:"chartData"`
 	}
 
 	data := DashboardData{
-		TotalPublications:       100,
-		TotalUsers:              50,
-		LicensesLast12Months:    30,
-		LicensesLastWeek:        5,
-		OldestLicenseDate:       "2022-01-01",
-		TotalLicensesSinceStart: 200,
+		TotalPublications:        100,
+		TotalUsers:               50,
+		TotalLicenses:            200,
+		LicensesLast12Months:     30,
+		LicensesLastMonth:        8,
+		LicensesLastWeek:         5,
+		LicensesLastDay:          2,
+		OldestLicenseDate:        "2022-01-01",
+		TotalLicensesSinceStart:  200,
+		OversharedLicensesCount:  23,
 		PublicationTypes: []PublicationType{
 			{Name: "EPUB", Count: 1284},
 			{Name: "PDF", Count: 892},

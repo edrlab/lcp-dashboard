@@ -1,13 +1,17 @@
-import { DashboardData } from '@/hooks/useDashboardData';
+import { DashboardData, OversharedLicense } from '@/hooks/useDashboardData';
 
 // Mock data for development
 export const mockDashboardData: DashboardData = {
   totalPublications: 2866,
   totalUsers: 428,
+  totalLicenses: 89234,
   licensesLast12Months: 6824,
+  licensesLastMonth: 573,
   licensesLastWeek: 127,
+  licensesLastDay: 18,
   oldestLicenseDate: "2022-01-15",
   totalLicensesSinceStart: 89234,
+  oversharedLicensesCount: 23,
   publicationTypes: [
     { name: "EPUB", count: 1284 },
     { name: "PDF", count: 892 },
@@ -36,3 +40,46 @@ export const mockDashboardData: DashboardData = {
     { month: "Dec", licenses: 923 },
   ],
 };
+
+export const mockOversharedLicenses: OversharedLicense[] = [
+  {
+    id: "lic-001",
+    title: "The Complete Guide to Modern Web Development with React and TypeScript",
+    user: "john.doe@example.com",
+    type: "loan",
+    status: "active",
+    devices: 5,
+  },
+  {
+    id: "lic-002",
+    title: "Advanced JavaScript Patterns",
+    user: "jane.smith@example.com",
+    type: "buy",
+    status: "ready",
+    devices: 4,
+  },
+  {
+    id: "lic-003",
+    title: "Mastering Node.js: Build Scalable Applications",
+    user: "bob.wilson@example.com",
+    type: "loan",
+    status: "active",
+    devices: 6,
+  },
+  {
+    id: "lic-004",
+    title: "CSS Grid and Flexbox: A Complete Guide",
+    user: "alice.brown@example.com",
+    type: "buy",
+    status: "expired",
+    devices: 3,
+  },
+  {
+    id: "lic-005",
+    title: "Python for Data Science and Machine Learning",
+    user: "charlie.davis@example.com",
+    type: "loan",
+    status: "active",
+    devices: 7,
+  },
+];

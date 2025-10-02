@@ -6,7 +6,8 @@ export const API_CONFIG = {
   ENDPOINTS: {
     LOGIN: '/dashboard/login',
     DASHBOARD: '/dashboard/data',
-    // Ajoutez d'autres endpoints selon vos besoins
+    OVERSHARED_LICENSES: '/dashboard/overshared-licenses',
+    REVOKE_LICENSE: (licenseId: string) => `/revoke/${licenseId}`,
   }
 };
 

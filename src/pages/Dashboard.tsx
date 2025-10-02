@@ -8,6 +8,8 @@ import { useDashboardData } from "@/hooks/useDashboardData";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 export default function Dashboard() {
   const { data: dashboardData, isLoading, error } = useDashboardData();
@@ -79,10 +81,25 @@ export default function Dashboard() {
             className="lg:col-span-1"
           />
           
+          {/* Total Licenses */}
+          <StatCard
+            title="Total Licenses"
+            value={dashboardData.totalLicenses}
+            className="lg:col-span-1"
+          />
+          
           {/* License Metrics */}
           <StatCard
             title="Last 12 months"
             value={dashboardData.licensesLast12Months}
+            subtitle="licenses generated"
+            trend="up"
+            className="lg:col-span-1"
+          />
+          
+          <StatCard
+            title="Last Month"
+            value={dashboardData.licensesLastMonth}
             subtitle="licenses generated"
             trend="up"
             className="lg:col-span-1"
@@ -95,6 +112,28 @@ export default function Dashboard() {
             trend="up"
             className="lg:col-span-1"
           />
+          
+          <StatCard
+            title="Last Day"
+            value={dashboardData.licensesLastDay}
+            subtitle="licenses generated"
+            trend="up"
+            className="lg:col-span-1"
+          />
+          
+          {/* Overshared Licenses with Link */}
+          <div className="lg:col-span-1">
+            <StatCard
+              title="Overshared Licenses"
+              value={dashboardData.oversharedLicensesCount}
+              className="h-full"
+            />
+            <Link to="/overshared-licenses">
+              <Button variant="link" className="mt-2 px-0 text-primary hover:text-primary/80">
+                Check
+              </Button>
+            </Link>
+          </div>
         </div>
 
         {/* Breakdown Section */}

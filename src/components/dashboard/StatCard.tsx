@@ -6,9 +6,10 @@ interface StatCardProps {
   subtitle?: string;
   trend?: "up" | "down" | "neutral";
   className?: string;
+  action?: React.ReactNode;
 }
 
-export function StatCard({ title, value, subtitle, trend, className }: StatCardProps) {
+export function StatCard({ title, value, subtitle, trend, className, action }: StatCardProps) {
   const getTrendColor = () => {
     switch (trend) {
       case "up":
@@ -32,6 +33,11 @@ export function StatCard({ title, value, subtitle, trend, className }: StatCardP
             </p>
           )}
         </div>
+        {action && (
+          <div className="mt-4">
+            {action}
+          </div>
+        )}
       </div>
     </Card>
   );

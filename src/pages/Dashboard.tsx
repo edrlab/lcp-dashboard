@@ -122,18 +122,18 @@ export default function Dashboard() {
           />
           
           {/* Overshared Licenses with Link */}
-          <div className="lg:col-span-1">
-            <StatCard
-              title="Overshared Licenses"
-              value={dashboardData.oversharedLicensesCount}
-              className="h-full"
-            />
-            <Link to="/overshared-licenses">
-              <Button variant="link" className="mt-2 px-0 text-primary hover:text-primary/80">
-                Check
-              </Button>
-            </Link>
-          </div>
+          <StatCard
+            title="Overshared Licenses"
+            value={dashboardData.oversharedLicensesCount}
+            className="lg:col-span-1"
+            action={
+              <Link to="/overshared-licenses">
+                <Button variant="outline" className="w-full">
+                  Check
+                </Button>
+              </Link>
+            }
+          />
         </div>
 
         {/* Breakdown Section */}

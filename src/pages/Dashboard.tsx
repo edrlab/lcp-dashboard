@@ -85,6 +85,7 @@ export default function Dashboard() {
           <StatCard
             title="Total Licenses"
             value={dashboardData.totalLicenses}
+            subtitle="Since Launch"
             className="lg:col-span-1"
           />
           
@@ -157,10 +158,9 @@ export default function Dashboard() {
           />
           
           <StatCard
-            title="Total Licenses"
-            value={dashboardData.totalLicensesSinceStart}
-            subtitle="Since inception"
-            trend="neutral"
+            title="Latest License Generated"
+            value={dashboardData.latestLicenseDate}
+            subtitle="Most recent license"
           />
         </div>
       </main>

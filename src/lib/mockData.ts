@@ -10,7 +10,7 @@ export const mockDashboardData: DashboardData = {
   licensesLastWeek: 127,
   licensesLastDay: 18,
   oldestLicenseDate: "2022-01-15",
-  totalLicensesSinceStart: 89234,
+  latestLicenseDate: "2025-10-02",
   oversharedLicensesCount: 23,
   publicationTypes: [
     { name: "EPUB", count: 1284 },

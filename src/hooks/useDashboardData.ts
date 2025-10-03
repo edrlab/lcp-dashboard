@@ -36,7 +36,7 @@ export interface DashboardData {
   licensesLastWeek: number;
   licensesLastDay: number;
   oldestLicenseDate: string;
-  totalLicensesSinceStart: number;
+  latestLicenseDate: string;
   oversharedLicensesCount: number;
   publicationTypes: PublicationType[];
   licenseStatuses: LicenseStatus[];

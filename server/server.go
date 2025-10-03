@@ -171,7 +171,7 @@ func Dashboard(w http.ResponseWriter, r *http.Request) {
 		LicensesLastWeek         int               `json:"licensesLastWeek"`
 		LicensesLastDay          int               `json:"licensesLastDay"`
 		OldestLicenseDate        string            `json:"oldestLicenseDate"`
-		TotalLicensesSinceStart  int               `json:"totalLicensesSinceStart"`
+		LatestLicenseDate        string            `json:"latestLicenseDate"`
 		OversharedLicensesCount  int               `json:"oversharedLicensesCount"`
 		PublicationTypes         []PublicationType `json:"publicationTypes"`
 		LicenseStatuses          []LicenseStatus   `json:"licenseStatuses"`
@@ -187,7 +187,7 @@ func Dashboard(w http.ResponseWriter, r *http.Request) {
 		LicensesLastWeek:         5,
 		LicensesLastDay:          2,
 		OldestLicenseDate:        "2022-01-01",
-		TotalLicensesSinceStart:  200,
+		LatestLicenseDate:        "2025-10-02",
 		OversharedLicensesCount:  23,
 		PublicationTypes: []PublicationType{
 			{Name: "EPUB", Count: 1284},

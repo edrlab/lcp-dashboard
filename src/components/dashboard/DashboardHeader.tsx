@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { LogOut, User } from "lucide-react";
-import edrLabLogo from "@/assets/edrlab-logo.jpg";
+import edrLabLogo from "@/assets/edrlab-logo.png";
 
 export function DashboardHeader() {
   const { user, logout } = useAuth();
@@ -18,7 +18,7 @@ export function DashboardHeader() {
           <div className="flex items-center space-x-3">
             <img 
               src={edrLabLogo} 
-              alt="EDR Lab Logo" 
+              alt="EDRLab Logo" 
               className="h-8 w-auto"
             />
           </div>

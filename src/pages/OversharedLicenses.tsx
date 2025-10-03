@@ -10,9 +10,10 @@ import { mockOversharedLicenses } from "@/lib/mockData";
 import { OversharedLicense } from "@/hooks/useDashboardData";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, ArrowLeft } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const fetchOversharedLicenses = async (): Promise<OversharedLicense[]> => {
   if (typeof __USE_MOCK_DATA__ !== 'undefined' && __USE_MOCK_DATA__) {
@@ -99,7 +100,14 @@ export default function OversharedLicenses() {
       <div className="min-h-screen bg-background">
         <DashboardHeader />
         <main className="container mx-auto px-6 py-8">
-          <h1 className="text-3xl font-bold text-foreground mb-6">Overshared Licenses</h1>
+          <div className="flex items-center gap-4 mb-6">
+            <Link to="/dashboard">
+              <Button variant="outline" size="icon" className="shrink-0">
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+            </Link>
+            <h1 className="text-3xl font-bold text-foreground">Overshared Licenses</h1>
+          </div>
           <div className="space-y-4">
             {Array.from({ length: 5 }).map((_, i) => (
               <Skeleton key={i} className="h-32 w-full" />
@@ -116,7 +124,14 @@ export default function OversharedLicenses() {
       <div className="min-h-screen bg-background">
         <DashboardHeader />
         <main className="container mx-auto px-6 py-8">
-          <h1 className="text-3xl font-bold text-foreground mb-6">Overshared Licenses</h1>
+          <div className="flex items-center gap-4 mb-6">
+            <Link to="/dashboard">
+              <Button variant="outline" size="icon" className="shrink-0">
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+            </Link>
+            <h1 className="text-3xl font-bold text-foreground">Overshared Licenses</h1>
+          </div>
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
@@ -138,7 +153,14 @@ export default function OversharedLicenses() {
       <DashboardHeader />
       
       <main className="container mx-auto px-6 py-8">
-        <h1 className="text-3xl font-bold text-foreground mb-6">Overshared Licenses</h1>
+        <div className="flex items-center gap-4 mb-6">
+          <Link to="/dashboard">
+            <Button variant="outline" size="icon" className="shrink-0">
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+          </Link>
+          <h1 className="text-3xl font-bold text-foreground">Overshared Licenses</h1>
+        </div>
         
         <div className="space-y-4">
           {licenses.map((license) => (

@@ -19,7 +19,7 @@ export function DashboardHeader() {
             <img 
               src={edrLabLogo} 
               alt="EDRLab Logo" 
-              className="h-8 w-auto"
+              className="h-12 w-auto"
             />
           </div>
 

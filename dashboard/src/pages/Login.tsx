@@ -13,16 +13,29 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showExpiredMessage, setShowExpiredMessage] = useState(false);
   
   const { login, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Check for expired session parameter
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    if (urlParams.get('expired') === 'true') {
+      setShowExpiredMessage(true);
+      // Clear the URL parameter
+      navigate(location.pathname, { replace: true });
+    }
+  }, [location.search, location.pathname, navigate]);
+
   // If user types /login directly in URL, redirect to home
   // But allow normal navigation from the app (when coming from /)
   useEffect(() => {
     // Check if user came from a direct URL access (no referrer from within the app)
-    if (!location.state?.fromApp) {
+    // Skip this check if there's an expired parameter
+    const urlParams = new URLSearchParams(location.search);
+    if (!location.state?.fromApp && urlParams.get('expired') !== 'true') {
       navigate('/', { replace: true });
       return;
     }
@@ -68,6 +81,15 @@ export default function Login() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            {showExpiredMessage && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>
+                  Your session has expired. Please log in again.
+                </AlertDescription>
+              </Alert>
+            )}
+            
             {error && (
               <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4" />

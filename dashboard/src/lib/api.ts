@@ -7,7 +7,7 @@ export const API_CONFIG = {
     LOGIN: '/dashboard/login',
     DASHBOARD: '/dashboard/data',
     OVERSHARED_LICENSES: '/dashboard/overshared-licenses',
-    REVOKE_LICENSE: (licenseId: string) => `/revoke/${licenseId}`,
+    REVOKE_LICENSE: (licenseId: string) => `/dashboard/revoke/${licenseId}`,
   }
 };
 

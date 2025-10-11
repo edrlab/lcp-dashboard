@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { apiService } from '@/lib/apiService';
 import { API_CONFIG } from '@/lib/api';
 import { mockDashboardData } from '@/lib/mockData';
+import { useApiErrorHandler } from './useApiErrorHandler';
 
 export interface PublicationType {
   name: string;
@@ -55,10 +56,27 @@ const fetchDashboardData = async (): Promise<DashboardData> => {
 };
 
 export const useDashboardData = () => {
-  return useQuery({
+  const { handleApiError } = useApiErrorHandler();
+  
+  const result = useQuery({
     queryKey: ['dashboard', __USE_MOCK_DATA__ ? 'mock' : 'api'],
     queryFn: fetchDashboardData,
     staleTime: 5 * 60 * 1000, // 5 minutes
     refetchOnWindowFocus: false,
+    retry: (failureCount, error) => {
+      // Don't retry on authentication errors
+      if (error instanceof Error && error.message.includes('401')) {
+        handleApiError(error);
+        return false;
+      }
+      return failureCount < 3;
+    },
   });
+
+  // Handle errors when they occur
+  if (result.error) {
+    handleApiError(result.error);
+  }
+
+  return result;
 };

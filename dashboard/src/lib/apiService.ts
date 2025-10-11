@@ -23,13 +23,29 @@ class ApiService {
   private async handleResponse<T>(response: Response): Promise<T> {
     if (!response.ok) {
       let errorMessage = `HTTP error ${response.status}`;
+      let errorCode: string | undefined;
+      
       try {
         const errorData = await response.json();
         errorMessage = errorData.message || errorData.error || errorMessage;
+        errorCode = errorData.code;
       } catch {
         // Ignore JSON parsing errors, use default message
       }
-      throw new ApiError(errorMessage, response.status);
+      
+      // Handle token expiration specifically
+      if (response.status === 401 && errorCode === 'TOKEN_EXPIRED') {
+        // Clear stored authentication data
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('auth_user');
+        
+        // Redirect to login page with expired parameter
+        window.location.href = '/login?expired=true';
+        
+        throw new ApiError('Your session has expired. Please log in again.', response.status, { code: errorCode });
+      }
+      
+      throw new ApiError(errorMessage, response.status, { code: errorCode });
     }
 
     try {

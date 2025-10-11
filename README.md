@@ -1,73 +1,78 @@
-# Welcome to your Lovable project
+# LCP License Hub
 
-## Project info
+A web application for managing LCP (Licensed Content Protection) licenses with a Go backend and React frontend.
 
-**URL**: https://lovable.dev/projects/be8a04b2-bd21-4286-bf28-bd7422f48ead
+## Project Structure
 
-## How can I edit this code?
+This project is organized into two main components:
 
-There are several ways of editing your application.
+### `/server/` - Go Backend API
+- RESTful API server built with Go and Chi router  
+- JWT authentication system
+- License management endpoints
+- CORS support for frontend integration
 
-**Use Lovable**
+### `/dashboard/` - React Frontend
+- Modern React/TypeScript application
+- Responsive dashboard with charts and statistics
+- Authentication UI with protected routes
+- Mock data mode for development
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/be8a04b2-bd21-4286-bf28-bd7422f48ead) and start prompting.
+## Quick Start
 
-Changes made via Lovable will be committed automatically to this repo.
+### Backend (Go Server)
 
-**Use your preferred IDE**
+```bash
+cd server
+go mod tidy
+go run .
+```
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+The API server will be available at http://localhost:8080
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Frontend (React Dashboard) 
 
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```bash  
+cd dashboard
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The dashboard will be available at http://localhost:8090
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Development Workflow
 
-**Use GitHub Codespaces**
+### Full Stack Development
+1. Start the Go server: `cd server && go run .`
+2. Start the React dev server: `cd dashboard && npm run dev`
+3. Access the dashboard at http://localhost:8090
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Frontend-Only Development
+1. Set `VITE_USE_MOCK_DATA=true` in `dashboard/.env.local`
+2. Start only the React dev server: `cd dashboard && npm run dev`
+3. Authentication and API calls will use mock data
 
-## What technologies are used for this project?
+## API Documentation
 
-This project is built with:
+See [API_CONFIG.md](./API_CONFIG.md) for detailed API endpoint documentation.
 
-- Vite
+## Environment Configuration
+
+Configure each component:
+- Server: Environment variables in `/server/`
+- Dashboard: Copy `dashboard/.env.example` to `dashboard/.env.local`
+
+## Technologies
+
+**Backend:**
+- Go 1.21+
+- Chi router
+- JWT authentication
+
+**Frontend:**  
+- React 18
 - TypeScript
-- React
-- shadcn-ui
+- Vite
 - Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/be8a04b2-bd21-4286-bf28-bd7422f48ead) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- shadcn-ui components
+- TanStack Query

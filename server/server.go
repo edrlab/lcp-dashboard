@@ -4,6 +4,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
 	"time"
@@ -30,6 +31,17 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 
+	// Middleware pour désactiver le cache en développement
+	r.Use(func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			// Headers pour désactiver le cache
+			w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+			w.Header().Set("Pragma", "no-cache")
+			w.Header().Set("Expires", "0")
+			next.ServeHTTP(w, r)
+		})
+	})
+
 	// Configuration CORS
 	r.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:8090", "http://localhost:8091"}, // URLs de votre frontend React
@@ -45,12 +57,15 @@ func main() {
 		r.Use(authMiddleware)
 		r.Get("/dashboard/data", Dashboard)
 		r.Get("/dashboard/overshared-licenses", OversharedLicenses)
-		r.Put("/revoke/{licenseID}", RevokeLicense)
+		r.Put("/dashboard/revoke/{licenseID}", RevokeLicense)
 	})
 
 	// Démarre le serveur sur le port 8080
 	log.Println("Serveur démarré sur le port 8080")
-	http.ListenAndServe(":8080", r)
+	err := http.ListenAndServe(":8080", r)
+	if err != nil {
+		log.Fatal("Erreur lors du démarrage du serveur :", err)
+	}
 }
 
 // Handler pour la route /dashboard/login
@@ -71,7 +86,8 @@ func login(w http.ResponseWriter, r *http.Request) {
 	log.Println("🔐 Utilisateur connecté :", creds.Username)
 
 	// Créez le token JWT
-	expirationTime := time.Now().Add(24 * time.Hour)
+	expirationTime := time.Now().Add(30 * time.Second) // 30 seconds for testing
+	//expirationTime := time.Now().Add(1 * time.Hour) // 1 hour for production
 	claims := &Claims{
 		Username: creds.Username,
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -112,36 +128,77 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 func authMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		c, err := r.Cookie("token")
-		if err != nil {
-			if err == http.ErrNoCookie {
-				http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		var tokenStr string
+
+		// Try to get token from Authorization header first (Bearer token)
+		authHeader := r.Header.Get("Authorization")
+		if authHeader != "" && len(authHeader) > 7 && authHeader[:7] == "Bearer " {
+			tokenStr = authHeader[7:]
+		} else {
+			// Fallback to cookie if no Authorization header
+			c, err := r.Cookie("token")
+			if err != nil {
+				if err == http.ErrNoCookie {
+					w.Header().Set("Content-Type", "application/json")
+					w.WriteHeader(http.StatusUnauthorized)
+					json.NewEncoder(w).Encode(map[string]string{"error": "No authentication token provided"})
+					return
+				}
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(http.StatusBadRequest)
+				json.NewEncoder(w).Encode(map[string]string{"error": "Bad request"})
 				return
 			}
-			http.Error(w, "Bad request", http.StatusBadRequest)
-			return
+			tokenStr = c.Value
 		}
 
-		tokenStr := c.Value
 		claims := &Claims{}
 		token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
 			return jwtKey, nil
 		})
 
 		if err != nil {
-			if err == jwt.ErrSignatureInvalid {
-				http.Error(w, "Unauthorized", http.StatusUnauthorized)
-				return
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusUnauthorized)
+
+			// Handle JWT validation errors using modern Go error handling
+			errorMessage := "Invalid token"
+			errorCode := ""
+
+			// Use errors.Is() to check for specific JWT errors in composite errors
+			if errors.Is(err, jwt.ErrTokenExpired) {
+				errorMessage = "Token has expired"
+				errorCode = "TOKEN_EXPIRED"
+			} else if errors.Is(err, jwt.ErrSignatureInvalid) {
+				errorMessage = "Invalid token signature"
+			} else if errors.Is(err, jwt.ErrTokenNotValidYet) {
+				errorMessage = "Token not valid yet"
+			} else if errors.Is(err, jwt.ErrTokenMalformed) {
+				errorMessage = "Token is malformed"
+			} else if errors.Is(err, jwt.ErrTokenUnverifiable) {
+				errorMessage = "Token could not be verified"
+			} else {
+				// For any other JWT parsing error, provide a generic message
+				errorMessage = "Invalid or malformed token"
 			}
-			http.Error(w, "Bad request", http.StatusBadRequest)
+
+			response := map[string]string{"error": errorMessage}
+			if errorCode != "" {
+				response["code"] = errorCode
+			}
+			json.NewEncoder(w).Encode(response)
 			return
 		}
 
 		if !token.Valid {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusUnauthorized)
+			json.NewEncoder(w).Encode(map[string]string{"error": "Token is not valid"})
 			return
 		}
 
+		// Add username to request context for use in handlers
+		r.Header.Set("X-Username", claims.Username)
 		next.ServeHTTP(w, r)
 	})
 }
@@ -163,32 +220,32 @@ func Dashboard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	type DashboardData struct {
-		TotalPublications        int               `json:"totalPublications"`
-		TotalUsers               int               `json:"totalUsers"`
-		TotalLicenses            int               `json:"totalLicenses"`
-		LicensesLast12Months     int               `json:"licensesLast12Months"`
-		LicensesLastMonth        int               `json:"licensesLastMonth"`
-		LicensesLastWeek         int               `json:"licensesLastWeek"`
-		LicensesLastDay          int               `json:"licensesLastDay"`
-		OldestLicenseDate        string            `json:"oldestLicenseDate"`
-		LatestLicenseDate        string            `json:"latestLicenseDate"`
-		OversharedLicensesCount  int               `json:"oversharedLicensesCount"`
-		PublicationTypes         []PublicationType `json:"publicationTypes"`
-		LicenseStatuses          []LicenseStatus   `json:"licenseStatuses"`
-		ChartData                []ChartDataPoint  `json:"chartData"`
+		TotalPublications       int               `json:"totalPublications"`
+		TotalUsers              int               `json:"totalUsers"`
+		TotalLicenses           int               `json:"totalLicenses"`
+		LicensesLast12Months    int               `json:"licensesLast12Months"`
+		LicensesLastMonth       int               `json:"licensesLastMonth"`
+		LicensesLastWeek        int               `json:"licensesLastWeek"`
+		LicensesLastDay         int               `json:"licensesLastDay"`
+		OldestLicenseDate       string            `json:"oldestLicenseDate"`
+		LatestLicenseDate       string            `json:"latestLicenseDate"`
+		OversharedLicensesCount int               `json:"oversharedLicensesCount"`
+		PublicationTypes        []PublicationType `json:"publicationTypes"`
+		LicenseStatuses         []LicenseStatus   `json:"licenseStatuses"`
+		ChartData               []ChartDataPoint  `json:"chartData"`
 	}
 
 	data := DashboardData{
-		TotalPublications:        100,
-		TotalUsers:               50,
-		TotalLicenses:            200,
-		LicensesLast12Months:     30,
-		LicensesLastMonth:        8,
-		LicensesLastWeek:         5,
-		LicensesLastDay:          2,
-		OldestLicenseDate:        "2022-01-01",
-		LatestLicenseDate:        "2025-10-02",
-		OversharedLicensesCount:  23,
+		TotalPublications:       100,
+		TotalUsers:              50,
+		TotalLicenses:           200,
+		LicensesLast12Months:    30,
+		LicensesLastMonth:       8,
+		LicensesLastWeek:        5,
+		LicensesLastDay:         2,
+		OldestLicenseDate:       "2022-01-01",
+		LatestLicenseDate:       "2025-10-02",
+		OversharedLicensesCount: 23,
 		PublicationTypes: []PublicationType{
 			{Name: "EPUB", Count: 1284},
 			{Name: "PDF", Count: 892},

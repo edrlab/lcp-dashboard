@@ -1,22 +1,22 @@
-# LCP License Hub
+# LCP Dashboard
 
-A web application for managing LCP (Licensed Content Protection) licenses with a Go backend and React frontend.
+A web application for managing LCP (Licensed Content Protection) licenses with a React frontend and Go mock backend.
 
 ## Project Structure
 
 This project is organized into two main components:
-
-### `/server/` - Go Backend API
-- RESTful API server built with Go and Chi router  
-- JWT authentication system
-- License management endpoints
-- CORS support for frontend integration
 
 ### `/dashboard/` - React Frontend
 - Modern React/TypeScript application
 - Responsive dashboard with charts and statistics
 - Authentication UI with protected routes
 - Mock data mode for development
+
+### `/server/` - Test Go Backend API
+- RESTful API server built with Go and Chi router  
+- JWT authentication system
+- License management endpoints
+- CORS support for frontend integration
 
 ## Quick Start
 
@@ -51,6 +51,89 @@ The dashboard will be available at http://localhost:8090
 1. Set `VITE_USE_MOCK_DATA=true` in `dashboard/.env.local`
 2. Start only the React dev server: `cd dashboard && npm run dev`
 3. Authentication and API calls will use mock data
+
+## Production Build
+
+### Building the Frontend
+
+```bash
+cd dashboard
+npm run build
+```
+
+This creates an optimized production build in the `dashboard/dist/` folder containing:
+- Minified JavaScript and CSS files
+- Optimized assets (images, icons)
+- Production-ready HTML
+
+### Preview Production Build
+
+```bash
+cd dashboard
+npm run preview
+```
+
+Serves the production build locally at http://localhost:4173 for testing.
+
+### Build Modes
+
+- **Production build**: `npm run build` (default, optimized)
+- **Development build**: `npm run build:dev` (faster, with source maps)
+
+### Automated Build Script
+
+Use the provided build script for convenience:
+
+```bash
+# Build everything (frontend + backend)
+./build.sh
+
+# Build only frontend
+./build.sh frontend
+
+# Build only backend  
+./build.sh backend
+```
+
+The script creates a `build/` directory with all production artifacts.
+
+## Deployment
+
+### Frontend Deployment
+
+The built frontend (`dashboard/dist/`) can be deployed on:
+
+- **Static hosting**: Netlify, Vercel, GitHub Pages
+- **Web server**: Nginx, Apache, IIS
+- **CDN**: AWS CloudFront, Cloudflare
+
+**Example Nginx configuration:**
+```nginx
+server {
+    listen 80;
+    root /path/to/dashboard/dist;
+    index index.html;
+    
+    # Handle client-side routing
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+    
+    # API proxy (optional)
+    location /dashboard/ {
+        proxy_pass http://localhost:8080;
+    }
+}
+```
+
+### Backend Deployment
+
+Build the Go server for production:
+```bash
+cd server
+go build -o lcp-server .
+./lcp-server
+```
 
 ## API Documentation
 

@@ -2,6 +2,34 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { apiService, ApiError } from '@/lib/apiService';
 import { API_CONFIG } from '@/lib/api';
 
+// Safe localStorage utilities
+const safeLocalStorageGet = (key: string): string | null => {
+  try {
+    const value = localStorage.getItem(key);
+    return (value && value !== 'undefined' && value !== 'null') ? value : null;
+  } catch {
+    return null;
+  }
+};
+
+const safeLocalStorageSet = (key: string, value: string): void => {
+  try {
+    if (value && value !== 'undefined' && value !== 'null') {
+      localStorage.setItem(key, value);
+    }
+  } catch (error) {
+    console.warn(`Failed to save ${key} to localStorage:`, error);
+  }
+};
+
+const safeLocalStorageRemove = (key: string): void => {
+  try {
+    localStorage.removeItem(key);
+  } catch (error) {
+    console.warn(`Failed to remove ${key} from localStorage:`, error);
+  }
+};
+
 interface User {
   id: string;
   email: string;
@@ -52,12 +80,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     // Check for existing token on mount (real auth mode)
-    const storedToken = localStorage.getItem('auth_token');
-    const storedUser = localStorage.getItem('auth_user');
+    const storedToken = safeLocalStorageGet('auth_token');
+    const storedUser = safeLocalStorageGet('auth_user');
     
     if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        if (parsedUser && typeof parsedUser === 'object' && parsedUser.id) {
+          setToken(storedToken);
+          setUser(parsedUser);
+        } else {
+          // Invalid user object structure
+          safeLocalStorageRemove('auth_token');
+          safeLocalStorageRemove('auth_user');
+        }
+      } catch (error) {
+        // Invalid JSON in localStorage, clear it
+        console.warn('Invalid user data in localStorage, clearing...');
+        safeLocalStorageRemove('auth_token');
+        safeLocalStorageRemove('auth_user');
+      }
     }
     setIsLoading(false);
   }, []);
@@ -82,8 +124,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const mockToken = 'mock-jwt-token-12345';
         
         // Store mock data (optional, for consistency)
-        localStorage.setItem('auth_token', mockToken);
-        localStorage.setItem('auth_user', JSON.stringify(mockUser));
+        safeLocalStorageSet('auth_token', mockToken);
+        safeLocalStorageSet('auth_user', JSON.stringify(mockUser));
         
         setToken(mockToken);
         setUser(mockUser);
@@ -96,6 +138,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         ? API_CONFIG.ENDPOINTS.LOGIN  // URL relative en dev (proxy Vite)
         : `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'}${API_CONFIG.ENDPOINTS.LOGIN}`;
       
+      console.log('Logging in to API URL:', apiUrl); // Debug log
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
@@ -124,8 +167,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const { token, user } = data;
 
       // Store token and user data
-      localStorage.setItem('auth_token', token);
-      localStorage.setItem('auth_user', JSON.stringify(user));
+      safeLocalStorageSet('auth_token', token);
+      safeLocalStorageSet('auth_user', JSON.stringify(user));
       
       setToken(token);
       setUser(user);
@@ -159,16 +202,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = () => {
     // In mock mode, still allow logout but user will be auto-logged back in on refresh
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('auth_user');
+    safeLocalStorageRemove('auth_token');
+    safeLocalStorageRemove('auth_user');
     setToken(null);
     setUser(null);
   };
 
   const handleTokenExpiration = () => {
     // Clear authentication state
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('auth_user');
+    safeLocalStorageRemove('auth_token');
+    safeLocalStorageRemove('auth_user');
     setToken(null);
     setUser(null);
   };

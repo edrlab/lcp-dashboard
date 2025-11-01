@@ -128,7 +128,7 @@ export default function Dashboard() {
             value={dashboardData.oversharedLicensesCount}
             className="lg:col-span-1"
             action={
-              <Link to="/overshared-licenses">
+              <Link to="/overshared">
                 <Button variant="outline" className="w-full bg-primary/10 text-primary border-primary/30 hover:bg-primary/20 hover:text-primary">
                   Check
                 </Button>

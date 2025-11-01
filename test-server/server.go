@@ -1,4 +1,4 @@
-// Copyright 2025 Laurent Le Meur
+// Copyright 2025 EDRLab
 
 package main
 
@@ -31,10 +31,10 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 
-	// Middleware pour désactiver le cache en développement
+	// Middleware, deactivation of the cache during development
 	r.Use(func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			// Headers pour désactiver le cache
+			// Headers to deactivate cache
 			w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 			w.Header().Set("Pragma", "no-cache")
 			w.Header().Set("Expires", "0")
@@ -42,9 +42,9 @@ func main() {
 		})
 	})
 
-	// Configuration CORS
+	// CORS configuration
 	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:8090", "http://localhost:8091"}, // URLs de votre frontend React
+		AllowedOrigins:   []string{"http://localhost:8090", "http://localhost:8091", "http://localhost:4173"}, // URLs React frontend
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
 		ExposedHeaders:   []string{"Link"},
@@ -56,19 +56,19 @@ func main() {
 	r.Group(func(r chi.Router) {
 		r.Use(authMiddleware)
 		r.Get("/dashboard/data", Dashboard)
-		r.Get("/dashboard/overshared-licenses", OversharedLicenses)
+		r.Get("/dashboard/overshared", OversharedLicenses)
 		r.Put("/dashboard/revoke/{licenseID}", RevokeLicense)
 	})
 
-	// Démarre le serveur sur le port 8080
-	log.Println("Serveur démarré sur le port 8080")
-	err := http.ListenAndServe(":8080", r)
+	// Start the server on port 8989
+	log.Println("Serveur démarré sur le port 8989")
+	err := http.ListenAndServe(":8989", r)
 	if err != nil {
 		log.Fatal("Erreur lors du démarrage du serveur :", err)
 	}
 }
 
-// Handler pour la route /dashboard/login
+// Handler for the /dashboard/login route
 func login(w http.ResponseWriter, r *http.Request) {
 	var creds Credentials
 	err := json.NewDecoder(r.Body).Decode(&creds)
@@ -77,7 +77,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Vérifiez les identifiants (exemple simplifié)
+	// Check credentials (simplified example)
 	if creds.Username != "admin" || creds.Password != "supersecret" {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
@@ -85,9 +85,9 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("🔐 Utilisateur connecté :", creds.Username)
 
-	// Créez le token JWT
-	expirationTime := time.Now().Add(30 * time.Second) // 30 seconds for testing
-	//expirationTime := time.Now().Add(1 * time.Hour) // 1 hour for production
+	// Create JWT token
+	//expirationTime := time.Now().Add(30 * time.Second) // 30 seconds for testing
+	expirationTime := time.Now().Add(1 * time.Hour) // 1 hour for production
 	claims := &Claims{
 		Username: creds.Username,
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -102,17 +102,17 @@ func login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Renvoie le token dans un cookie (optionnel)
+	// Send back the token in a cookie (optional)
 	http.SetCookie(w, &http.Cookie{
 		Name:     "token",
 		Value:    tokenString,
 		Expires:  expirationTime,
 		HttpOnly: true,
-		Secure:   false, // false pour le développement local
+		Secure:   false, // false for local development
 		SameSite: http.SameSiteStrictMode,
 	})
 
-	// Renvoie aussi le token et les informations utilisateur en JSON
+	// Also return the token and user information as JSON
 	response := map[string]interface{}{
 		"token": tokenString,
 		"user": map[string]interface{}{
@@ -121,6 +121,9 @@ func login(w http.ResponseWriter, r *http.Request) {
 			"name":  creds.Username,
 		},
 	}
+
+	responseJSON, _ := json.Marshal(response)
+	log.Println("Response:", string(responseJSON))
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
@@ -277,4 +280,78 @@ func Dashboard(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(data)
+}
+
+type OversharedLicenseData struct {
+	ID      string `json:"id"`
+	Title   string `json:"title"`
+	User    string `json:"user"`
+	Type    string `json:"type"`
+	Status  string `json:"status"`
+	Devices int    `json:"devices"`
+}
+
+func OversharedLicenses(w http.ResponseWriter, r *http.Request) {
+	licenses := []OversharedLicenseData{
+		{
+			ID:      "lic-001",
+			Title:   "The Complete Guide to Modern Web Development with React and TypeScript",
+			User:    "john.doe@example.com",
+			Type:    "loan",
+			Status:  "active",
+			Devices: 5,
+		},
+		{
+			ID:      "lic-002",
+			Title:   "Advanced JavaScript Patterns",
+			User:    "jane.smith@example.com",
+			Type:    "buy",
+			Status:  "ready",
+			Devices: 4,
+		},
+		{
+			ID:      "lic-003",
+			Title:   "Mastering Node.js: Build Scalable Applications",
+			User:    "bob.wilson@example.com",
+			Type:    "loan",
+			Status:  "active",
+			Devices: 6,
+		},
+		{
+			ID:      "lic-004",
+			Title:   "CSS Grid and Flexbox: A Complete Guide",
+			User:    "alice.brown@example.com",
+			Type:    "buy",
+			Status:  "expired",
+			Devices: 3,
+		},
+		{
+			ID:      "lic-005",
+			Title:   "Python for Data Science and Machine Learning",
+			User:    "charlie.davis@example.com",
+			Type:    "loan",
+			Status:  "active",
+			Devices: 7,
+		},
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(licenses)
+}
+
+func RevokeLicense(w http.ResponseWriter, r *http.Request) {
+	licenseID := chi.URLParam(r, "licenseID")
+
+	log.Printf("🔄 Revoking license: %s", licenseID)
+
+	// Simulate successful revocation
+	response := map[string]interface{}{
+		"success":   true,
+		"message":   "License revocation was successful",
+		"licenseID": licenseID,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(response)
 }

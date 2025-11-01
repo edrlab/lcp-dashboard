@@ -32,7 +32,7 @@ const App = () => (
               } 
             />
             <Route 
-              path="/overshared-licenses" 
+              path="/overshared" 
               element={
                 <ProtectedRoute>
                   <OversharedLicenses />

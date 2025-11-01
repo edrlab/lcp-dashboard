@@ -26,7 +26,7 @@ const fetchOversharedLicenses = async (): Promise<OversharedLicense[]> => {
 
 const useOversharedLicenses = () => {
   return useQuery({
-    queryKey: ['overshared-licenses', __USE_MOCK_DATA__ ? 'mock' : 'api'],
+    queryKey: ['overshared', __USE_MOCK_DATA__ ? 'mock' : 'api'],
     queryFn: fetchOversharedLicenses,
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
@@ -163,7 +163,7 @@ export default function OversharedLicenses() {
         </div>
         
         <div className="space-y-4">
-          {licenses.map((license) => (
+          {(licenses || []).map((license) => (
             <Card key={license.id} className="p-6 bg-gradient-card border-stat-border hover:shadow-lg transition-all duration-300">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div className="flex-1 space-y-2">

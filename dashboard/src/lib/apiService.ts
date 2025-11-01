@@ -1,5 +1,23 @@
 import { buildApiUrl, API_CONFIG } from './api';
 
+// Safe localStorage utilities (duplicated from AuthContext for independence)
+const safeLocalStorageGet = (key: string): string | null => {
+  try {
+    const value = localStorage.getItem(key);
+    return (value && value !== 'undefined' && value !== 'null') ? value : null;
+  } catch {
+    return null;
+  }
+};
+
+const safeLocalStorageRemove = (key: string): void => {
+  try {
+    localStorage.removeItem(key);
+  } catch (error) {
+    console.warn(`Failed to remove ${key} from localStorage:`, error);
+  }
+};
+
 export class ApiError extends Error {
   constructor(
     message: string,
@@ -13,7 +31,7 @@ export class ApiError extends Error {
 
 class ApiService {
   private getAuthHeaders(): HeadersInit {
-    const token = localStorage.getItem('auth_token');
+    const token = safeLocalStorageGet('auth_token');
     return {
       'Content-Type': 'application/json',
       ...(token && { 'Authorization': `Bearer ${token}` }),
@@ -36,8 +54,8 @@ class ApiService {
       // Handle token expiration specifically
       if (response.status === 401 && errorCode === 'TOKEN_EXPIRED') {
         // Clear stored authentication data
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('auth_user');
+        safeLocalStorageRemove('auth_token');
+        safeLocalStorageRemove('auth_user');
         
         // Redirect to login page with expired parameter
         window.location.href = '/login?expired=true';

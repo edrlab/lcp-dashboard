@@ -9,7 +9,12 @@ import { componentTagger } from "lovable-tagger";
 const USE_MOCK_DATA = process.env.VITE_USE_MOCK_DATA === 'true' || false; // Change to false to use real API
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
+export default defineConfig(({ mode }) => {
+  const apiBaseUrl = process.env.VITE_API_BASE_URL || 'http://localhost:8989';
+  console.log('🔧 API Base URL:', apiBaseUrl);
+  console.log('🔧 VITE_API_BASE_URL env var:', process.env.VITE_API_BASE_URL);
+  
+  return {
   server: {
     host: "::",
     port: 8090,
@@ -23,22 +28,22 @@ export default defineConfig(({ mode }) => ({
     // Proxy only API routes, not frontend routes
     proxy: {
       '/dashboard/login': {
-        target: process.env.VITE_API_BASE_URL || 'http://localhost:8080',
+        target: apiBaseUrl,
         changeOrigin: true,
         secure: false,
       },
       '/dashboard/data': {
-        target: process.env.VITE_API_BASE_URL || 'http://localhost:8080',
+        target: apiBaseUrl,
         changeOrigin: true,
         secure: false,
       },
-      '/dashboard/overshared-licenses': {
-        target: process.env.VITE_API_BASE_URL || 'http://localhost:8080',
+      '/dashboard/overshared': {
+        target: apiBaseUrl,
         changeOrigin: true,
         secure: false,
       },
       '/dashboard/revoke': {
-        target: process.env.VITE_API_BASE_URL || 'http://localhost:8080',
+        target: apiBaseUrl,
         changeOrigin: true,
         secure: false,
       },
@@ -68,4 +73,5 @@ export default defineConfig(({ mode }) => ({
       }
     } : {}
   },
-}));
+  };
+});

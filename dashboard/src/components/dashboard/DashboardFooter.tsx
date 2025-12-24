@@ -4,7 +4,7 @@ export function DashboardFooter() {
       <div className="container mx-auto px-6 py-4">
         <div className="text-center">
           <p className="text-sm text-muted-foreground">
-            EDRLab contact email:{" "}
+            Contact email:{" "}
             <a 
               href="mailto:contact@edrlab.org" 
               className="text-primary hover:text-accent transition-colors"

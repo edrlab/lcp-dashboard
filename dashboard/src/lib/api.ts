@@ -2,7 +2,7 @@
 export const API_CONFIG = {
   // En développement, utiliser des URLs relatives pour passer par le proxy Vite
   // En production, utiliser l'URL complète de l'API
-  BASE_URL: import.meta.env.DEV ? '' : (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'),
+  BASE_URL: import.meta.env.DEV ? '' : (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8989'),
   ENDPOINTS: {
     LOGIN: '/dashboard/login',
     DASHBOARD: '/dashboard/data',

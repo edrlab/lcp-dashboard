@@ -136,7 +136,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Real authentication mode
       const apiUrl = import.meta.env.DEV 
         ? API_CONFIG.ENDPOINTS.LOGIN  // URL relative en dev (proxy Vite)
-        : `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'}${API_CONFIG.ENDPOINTS.LOGIN}`;
+        : `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8989'}${API_CONFIG.ENDPOINTS.LOGIN}`;
       
       console.log('Logging in to API URL:', apiUrl); // Debug log
       const response = await fetch(apiUrl, {

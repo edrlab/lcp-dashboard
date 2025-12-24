@@ -1,4 +1,4 @@
-# LCP License Hub - Dashboard
+# LCP Dashboard
 
 This is the React/TypeScript dashboard for the LCP Server.
 
@@ -43,7 +43,7 @@ Copy `.env.example` to `.env.local` and configure:
 
 ```bash
 # API Configuration
-VITE_API_BASE_URL=http://localhost:8080
+VITE_API_BASE_URL=http://localhost:8989
 
 # Mock Data Configuration
 # Set to 'true' to use static mock data for development

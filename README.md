@@ -23,12 +23,12 @@ This project is organized into two main components:
 ### Backend (Go Server)
 
 ```bash
-cd server
+cd test-server
 go mod tidy
 go run .
 ```
 
-The API server will be available at http://localhost:8080
+The API server will be available at http://localhost:8989
 
 ### Frontend (React Dashboard) 
 
@@ -40,9 +40,11 @@ npm run dev
 
 The dashboard will be available at http://localhost:8090
 
+The test-server authorizes the user with name `admin` and password `supersecret`. 
+
 ## Development Workflow
 
-### Full Stack Development
+### Client-Server Development
 1. Start the Go server: `cd server && go run .`
 2. Start the React dev server: `cd dashboard && npm run dev`
 3. Access the dashboard at http://localhost:8090
@@ -121,7 +123,7 @@ server {
     
     # API proxy (optional)
     location /dashboard/ {
-        proxy_pass http://localhost:8080;
+        proxy_pass http://localhost:8989;
     }
 }
 ```

@@ -44,7 +44,7 @@ func main() {
 
 	// CORS configuration
 	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:8090", "http://localhost:8091", "http://localhost:4173"}, // URLs React frontend
+		AllowedOrigins:   []string{"http://localhost:8090", "http://localhost:4173"}, // URLs React frontend
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
 		ExposedHeaders:   []string{"Link"},
@@ -52,12 +52,12 @@ func main() {
 		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	}))
 
-	r.Post("/dashboard/login", login)
+	r.Post("/dashdata/login", login)
 	r.Group(func(r chi.Router) {
 		r.Use(authMiddleware)
-		r.Get("/dashboard/data", Dashboard)
-		r.Get("/dashboard/overshared", OversharedLicenses)
-		r.Put("/dashboard/revoke/{licenseID}", RevokeLicense)
+		r.Get("/dashdata/data", Dashboard)
+		r.Get("/dashdata/overshared", OversharedLicenses)
+		r.Put("/dashdata/revoke/{licenseID}", RevokeLicense)
 	})
 
 	// Start the server on port 8989
@@ -68,7 +68,7 @@ func main() {
 	}
 }
 
-// Handler for the /dashboard/login route
+// Handler for the dashboard login route
 func login(w http.ResponseWriter, r *http.Request) {
 	var creds Credentials
 	err := json.NewDecoder(r.Body).Decode(&creds)
@@ -261,6 +261,7 @@ func Dashboard(w http.ResponseWriter, r *http.Request) {
 			{Name: "Expired", Count: 12834},
 			{Name: "Revoked", Count: 1856},
 			{Name: "Canceled", Count: 456},
+			{Name: "Returned", Count: 124},
 		},
 		ChartData: []ChartDataPoint{
 			{Month: "Jan", Licenses: 245},
@@ -292,6 +293,7 @@ type OversharedLicenseData struct {
 }
 
 func OversharedLicenses(w http.ResponseWriter, r *http.Request) {
+	
 	licenses := []OversharedLicenseData{
 		{
 			ID:      "lic-001",

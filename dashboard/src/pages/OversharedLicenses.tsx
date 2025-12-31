@@ -14,6 +14,7 @@ import { AlertCircle, ArrowLeft } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { capitalizeFirstLetter } from "@/lib/iconMapper";
 
 const fetchOversharedLicenses = async (): Promise<OversharedLicense[]> => {
   if (typeof __USE_MOCK_DATA__ !== 'undefined' && __USE_MOCK_DATA__) {
@@ -144,9 +145,7 @@ export default function OversharedLicenses() {
     );
   }
 
-  if (!licenses) {
-    return null;
-  }
+  const licenseList = licenses || [];
 
   return (
     <div className="min-h-screen bg-background">
@@ -163,62 +162,73 @@ export default function OversharedLicenses() {
         </div>
         
         <div className="space-y-4">
-          {(licenses || []).map((license) => (
-            <Card key={license.id} className="p-6 bg-gradient-card border-stat-border hover:shadow-lg transition-all duration-300">
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <div className="flex-1 space-y-2">
-                  <h3 className="text-lg font-semibold text-foreground line-clamp-2">
-                    {license.title}
-                  </h3>
-                  
-                  <div className="flex flex-wrap gap-2 items-center text-sm">
-                    <span className="text-muted-foreground">User:</span>
-                    <span className="text-foreground font-medium">{license.user}</span>
-                  </div>
-                  
-                  <div className="flex flex-wrap gap-3 items-center">
-                    <div className="flex items-center gap-2">
-                      <span className="text-muted-foreground text-sm">Type:</span>
-                      <Badge variant="outline" className={getTypeColor(license.type)}>
-                        {license.type}
-                      </Badge>
-                    </div>
-                    
-                    <div className="flex items-center gap-2">
-                      <span className="text-muted-foreground text-sm">Status:</span>
-                      <Badge variant="outline" className={getStatusColor(license.status)}>
-                        {license.status}
-                      </Badge>
-                    </div>
-                    
-                    <div className="flex items-center gap-2">
-                      <span className="text-muted-foreground text-sm">Devices:</span>
-                      <span className="text-xl font-bold text-primary">
-                        {license.devices}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="flex-shrink-0">
-                  {(license.status === "active" || license.status === "ready") && (
-                    <Button
-                      onClick={() => handleRevoke(license.id)}
-                      disabled={processingLicenses.has(license.id)}
-                      variant={license.status === "active" ? "destructive" : "default"}
-                      //className={`min-w-[100px] ${license.status === "ready" ? "bg-muted/50 text-muted-foreground border-muted hover:bg-muted/70" : ""}`}
-                    >
-                      {processingLicenses.has(license.id) 
-                        ? "Processing..." 
-                        : license.status === "active" 
-                          ? "Revoke" 
-                          : "Cancel"}
-                    </Button>
-                  )}
-                </div>
+          {licenseList.length === 0 ? (
+            <Card className="p-12 flex flex-col items-center justify-center text-center bg-gradient-card border-stat-border">
+              <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                <AlertCircle className="h-6 w-6 text-primary" />
               </div>
+              <h3 className="text-lg font-semibold text-foreground mb-2">No overshared licenses found</h3>
+              <p className="text-muted-foreground max-w-md">
+                There are currently no licenses that exceed the sharing threshold.
+              </p>
             </Card>
-          ))}
+          ) : (
+            licenseList.map((license) => (
+              <Card key={license.id} className="p-6 bg-gradient-card border-stat-border hover:shadow-lg transition-all duration-300">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <div className="flex-1 space-y-2">
+                    <h3 className="text-lg font-semibold text-foreground line-clamp-2">
+                      {license.title}
+                    </h3>
+                    
+                    <div className="flex flex-wrap gap-2 items-center text-sm">
+                      <span className="text-muted-foreground">User:</span>
+                      <span className="text-foreground font-medium">{license.user}</span>
+                    </div>
+                    
+                    <div className="flex flex-wrap gap-3 items-center">
+                      <div className="flex items-center gap-2">
+                        <span className="text-muted-foreground text-sm">Type:</span>
+                        <Badge variant="outline" className={getTypeColor(license.type)}>
+                          {capitalizeFirstLetter(license.type)}
+                        </Badge>
+                      </div>
+                      
+                      <div className="flex items-center gap-2">
+                        <span className="text-muted-foreground text-sm">Status:</span>
+                        <Badge variant="outline" className={getStatusColor(license.status)}>
+                          {capitalizeFirstLetter(license.status)}
+                        </Badge>
+                      </div>
+                      
+                      <div className="flex items-center gap-2">
+                        <span className="text-muted-foreground text-sm">Devices:</span>
+                        <span className="text-xl font-bold text-primary">
+                          {license.devices}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex-shrink-0">
+                    {(license.status === "active" || license.status === "ready") && (
+                      <Button
+                        onClick={() => handleRevoke(license.id)}
+                        disabled={processingLicenses.has(license.id)}
+                        variant={license.status === "active" ? "destructive" : "default"}
+                      >
+                        {processingLicenses.has(license.id) 
+                          ? "Processing..." 
+                          : license.status === "active" 
+                            ? "Revoke" 
+                            : "Cancel"}
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </Card>
+            ))
+          )}
         </div>
       </main>
 

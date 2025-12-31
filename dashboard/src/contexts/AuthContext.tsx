@@ -133,10 +133,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return { success: true };
       }
 
-      // Real authentication mode
+      // Real authentication mode (no mock data)
       const apiUrl = import.meta.env.DEV 
-        ? API_CONFIG.ENDPOINTS.LOGIN  // URL relative en dev (proxy Vite)
-        : `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8989'}${API_CONFIG.ENDPOINTS.LOGIN}`;
+        ? API_CONFIG.ENDPOINTS.LOGIN  // relative URL during dev (Vite proxy)
+        : `${import.meta.env.VITE_API_BASE_URL || ''}${API_CONFIG.ENDPOINTS.LOGIN}`;
       
       console.log('Logging in to API URL:', apiUrl); // Debug log
       const response = await fetch(apiUrl, {

@@ -36,18 +36,19 @@ With this configuration:
 ## Configuration for production
 Set the `VITE_API_BASE_URL` environment variable during the build:
 ```bash
-VITE_API_BASE_URL=https://api.votre-domaine.com npm run build
+VITE_API_BASE_URL=https://domain-api.com npm run build
 ```
 ## API endpoints
 The application expects these endpoints on your API server:
-- `POST /dashboard/login`: Authentication with `{ username, password }`
+- `POST /dashdata/login`: Authentication with `{ username, password }`
 - Returns: `{ token, user: { id, email, name? } }`
-- `GET /dashboard/data`: Dashboard data (requires Bearer authentication)
-  
+- `GET /dashdata/data`: Dashboard data (requires Bearer authentication)
 - Returns: `{ totalPublications, totalUsers, licensesLast12Months, licensesLastWeek, oldestLicenseDate, totalLicensesSinceStart }`
+- `GET /dashdata/overshared`: Overshared licenses (requires Bearer authentication)
+- `PUT /dashdata/revoke`: A revoke command sent through the dashboard (requires Bearer authentication)
 
 ## Development proxy
-The `vite.config.ts` file is configured with a proxy to redirect `/dashboard/*` requests to your API server during development. This avoids CORS issues during development.
+The `vite.config.ts` file is configured with a proxy to redirect `/dashdata/*` requests to your API server during development. This avoids CORS issues during this phase.
 
 ## Architecture
 - `src/lib/api.ts`: Endpoint and helper configuration

@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDashboardData } from "@/hooks/useDashboardData";
-import { getPublicationTypeConfig } from "@/lib/iconMapper";
+import { getPublicationTypeConfig, capitalizeFirstLetter } from "@/lib/iconMapper";
 
 export function PublicationBreakdown() {
   const { data: dashboardData, isLoading, error } = useDashboardData();
@@ -60,7 +60,7 @@ export function PublicationBreakdown() {
                   <div className={`p-2 rounded-lg ${color}/20`}>
                     <IconComponent className={`h-4 w-4 text-current`} style={{ color: `hsl(var(--${color.replace('bg-', '')}))` }} />
                   </div>
-                  <span className="font-medium text-foreground">{name}</span>
+                  <span className="font-medium text-foreground">{capitalizeFirstLetter(name)}</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Badge variant="secondary" className="text-xs">

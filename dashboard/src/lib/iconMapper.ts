@@ -25,16 +25,31 @@ export const licenseStatusConfig: Record<string, { icon: LucideIcon; color: stri
   Active: { icon: Play, color: "bg-success" },
   Expired: { icon: Clock, color: "bg-warning" },
   Revoked: { icon: Ban, color: "bg-destructive" },
-  Canceled: { icon: XCircle, color: "bg-chart-secondary" },
+  Canceled: { icon: XCircle, color: "bg-destructive" },
+  Returned: { icon: XCircle, color: "bg-warning" },
 };
 
 // Fallback pour les types non reconnus
 const defaultConfig = { icon: Book, color: "bg-chart-primary" };
 
+// Fonction utilitaire pour mettre la première lettre en majuscule
+export const capitalizeFirstLetter = (string: string) => {
+  if (!string) return "";
+  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+};
+
 export const getPublicationTypeConfig = (typeName: string) => {
-  return publicationTypeConfig[typeName] || defaultConfig;
+  // Recherche insensible à la casse
+  const key = Object.keys(publicationTypeConfig).find(
+    k => k.toLowerCase() === typeName.toLowerCase()
+  );
+  return key ? publicationTypeConfig[key] : defaultConfig;
 };
 
 export const getLicenseStatusConfig = (statusName: string) => {
-  return licenseStatusConfig[statusName] || defaultConfig;
+  // Recherche insensible à la casse
+  const key = Object.keys(licenseStatusConfig).find(
+    k => k.toLowerCase() === statusName.toLowerCase()
+  );
+  return key ? licenseStatusConfig[key] : defaultConfig;
 };

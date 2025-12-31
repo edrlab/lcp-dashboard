@@ -27,22 +27,22 @@ export default defineConfig(({ mode }) => {
     // Configuration proxy pour le développement (optionnel)
     // Proxy only API routes, not frontend routes
     proxy: {
-      '/dashboard/login': {
+      '/dashdata/login': {
         target: apiBaseUrl,
         changeOrigin: true,
         secure: false,
       },
-      '/dashboard/data': {
+      '/dashdata/data': {
         target: apiBaseUrl,
         changeOrigin: true,
         secure: false,
       },
-      '/dashboard/overshared': {
+      '/dashdata/overshared': {
         target: apiBaseUrl,
         changeOrigin: true,
         secure: false,
       },
-      '/dashboard/revoke': {
+      '/dashdata/revoke': {
         target: apiBaseUrl,
         changeOrigin: true,
         secure: false,

@@ -1,13 +1,13 @@
 // API configuration
 export const API_CONFIG = {
-  // En développement, utiliser des URLs relatives pour passer par le proxy Vite
-  // En production, utiliser l'URL complète de l'API
-  BASE_URL: import.meta.env.DEV ? '' : (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8989'),
+  // During development, use relative URLs to go through the Vite proxy
+  // In production, use VITE_API_BASE_URL or an empty string by default
+  BASE_URL: import.meta.env.DEV ? '' : (import.meta.env.VITE_API_BASE_URL || ''),
   ENDPOINTS: {
-    LOGIN: '/dashboard/login',
-    DASHBOARD: '/dashboard/data',
-    OVERSHARED_LICENSES: '/dashboard/overshared',
-    REVOKE_LICENSE: (licenseId: string) => `/dashboard/revoke/${licenseId}`,
+    LOGIN: '/dashdata/login',
+    DASHBOARD: '/dashdata/data',
+    OVERSHARED_LICENSES: '/dashdata/overshared',
+    REVOKE_LICENSE: (licenseId: string) => `/dashdata/revoke/${licenseId}`,
   }
 };
 

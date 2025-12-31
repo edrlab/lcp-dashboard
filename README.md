@@ -23,6 +23,7 @@ This will demonstrate how the dashboard works, using two terminals.
 The backend exposes static data to the frontend. 
 
 ### Backend (Go Server)
+A recent Go environment is required.
 
 ```bash
 cd test-server
@@ -30,15 +31,20 @@ go mod tidy
 go run .
 ```
 
+Note: go mod tidy will install the required dependencies and is required on the first execution only. 
+
 The API server will be available at http://localhost:8989
 
 ### Frontend (React Dashboard) 
+A recent npm / node.js environment is required. 
 
 ```bash  
 cd dashboard
 npm install
 npm run dev
 ```
+
+Note: npm install will install the required dependencies and is required on the first execution only. 
 
 The dashboard will be available at http://localhost:8090
 
@@ -190,35 +196,38 @@ Note: port 8090 is the one configured in the CORS headers of the test server (an
 
 > cd ~/work/lcp/lcp-dashboard
 
-In nginx.conf, you should find the service name of the LCP server
+In nginx.conf, you should find the service name of a dockerized LCP server:
 proxy_pass http://server:8989;
 
-In the ./dashboard directory
+If you want to test the dockerized dasboard with a local LCP server, replace this command by the (currently commented) line:
+proxy_pass http://host.docker.internal:8989;
+
+From the ./dashboard directory, enter (if your target is an amd64 system):
 ```
 docker build --platform linux/amd64 -t llemeur/lcp-dashboard:latest-amd64 .
 ```
 
 #### Tag the image
 ```
-docker tag lcp-dashboard llemeur/lcp-dashboard:latest-amd64
+docker tag lcp-dashboard {your-docker-repo}/lcp-dashboard:latest-amd64
 ```
 #### Push the amd64 image to Docker Hub
 ```
-docker push llemeur/lcp-dashboard:latest-amd64
+docker push {your-docker-repo}/lcp-dashboard:latest-amd64
 ```
 #### Modify compose-vm.yaml on the LCP Server
 
-On the VM, compose.yaml must be modified to use the new dashboard image:
+On the target system, compose.yaml must be modified to use the new dashboard image:
 
 ```yaml
 services:
     dashboard:
-        image: llemeur/lcp-dashboard:latest-amd64
+        image: {your-docker-repo}/lcp-dashboard:latest-amd64
         ports:
             - “8080:8080”
         depends_on:
             - server
-````
+```
 
 ## API Documentation
 
@@ -244,3 +253,10 @@ Configure each component:
 - Tailwind CSS
 - shadcn-ui components
 - TanStack Query
+
+## History
+The LCP Server provides a monitoring API, but nobody ever proposed an open-source dashboard for it ... until now.
+
+This started as an experiment of vide-coding with Lovable. The codebase was then enhanced using vscode with Gemini (mostly 2.5 Pro). 
+
+The Test Server in Go is a minified version of the LCP Server V2, serving static data.  

@@ -61,10 +61,10 @@ func main() {
 	})
 
 	// Start the server on port 8989
-	log.Println("Serveur démarré sur le port 8989")
+	log.Println("Server started on port 8989")
 	err := http.ListenAndServe(":8989", r)
 	if err != nil {
-		log.Fatal("Erreur lors du démarrage du serveur :", err)
+		log.Fatal("Error starting server:", err)
 	}
 }
 
@@ -83,7 +83,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println("🔐 Utilisateur connecté :", creds.Username)
+	log.Println("🔐 User:", creds.Username)
 
 	// Create JWT token
 	//expirationTime := time.Now().Add(30 * time.Second) // 30 seconds for testing
@@ -121,9 +121,6 @@ func login(w http.ResponseWriter, r *http.Request) {
 			"name":  creds.Username,
 		},
 	}
-
-	responseJSON, _ := json.Marshal(response)
-	log.Println("Response:", string(responseJSON))
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)

@@ -6,10 +6,10 @@ export function DashboardFooter() {
           <p className="text-sm text-muted-foreground">
             Contact email:{" "}
             <a 
-              href="mailto:laurent@fluxnumerique.fr" 
+              href="mailto:contact@edrlab.org" 
               className="text-primary hover:text-accent transition-colors"
             >
-              laurent@fluxnumerique.fr
+              contact@edrlab.org
             </a>
           </p>
         </div>

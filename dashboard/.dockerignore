@@ -1,0 +1,16 @@
+# Ignore node_modules, it will be installed in the container
+node_modules
+
+# Ignore build output, it will be generated in the container
+dist
+
+# Ignore environment files
+.env
+.env.*
+
+# Ignore git files
+.git
+.gitignore
+
+# Ignore test server
+../test-server

@@ -281,56 +281,74 @@ func Dashboard(w http.ResponseWriter, r *http.Request) {
 }
 
 type OversharedLicenseData struct {
-	ID      string `json:"id"`
-	Title   string `json:"title"`
-	User    string `json:"user"`
-	Type    string `json:"type"`
-	Status  string `json:"status"`
-	Devices int    `json:"devices"`
+	ID            string `json:"id"`
+	PublicationID string `json:"publicationId"`
+	AltID         string `json:"altId"`
+	Title         string `json:"title"`
+	UserID        string `json:"userId"`
+	UserEmail     string `json:"userEmail"`
+	Type          string `json:"type"`
+	Status        string `json:"status"`
+	Devices       int    `json:"devices"`
 }
 
 func OversharedLicenses(w http.ResponseWriter, r *http.Request) {
 	
 	licenses := []OversharedLicenseData{
 		{
-			ID:      "lic-001",
-			Title:   "The Complete Guide to Modern Web Development with React and TypeScript",
-			User:    "john.doe@example.com",
-			Type:    "loan",
-			Status:  "active",
-			Devices: 5,
+			ID:            "lic-001",
+			PublicationID: "pub-123",
+			AltID:         "alt-123",
+			Title:         "The Complete Guide to Modern Web Development with React and TypeScript",
+			UserID:        "user-001",
+			UserEmail:     "john.doe@example.com",
+			Type:          "loan",
+			Status:        "active",
+			Devices:       5,
 		},
 		{
-			ID:      "lic-002",
-			Title:   "Advanced JavaScript Patterns",
-			User:    "jane.smith@example.com",
-			Type:    "buy",
-			Status:  "ready",
-			Devices: 4,
+			ID:            "lic-002",
+			PublicationID: "pub-456",
+			AltID:         "alt-456",
+			Title:         "Advanced JavaScript Patterns",
+			UserID:        "user-002",
+			UserEmail:     "",
+			Type:          "buy",
+			Status:        "ready",
+			Devices:       4,
 		},
 		{
-			ID:      "lic-003",
-			Title:   "Mastering Node.js: Build Scalable Applications",
-			User:    "bob.wilson@example.com",
-			Type:    "loan",
-			Status:  "active",
-			Devices: 6,
+			ID:            "lic-003",
+			PublicationID: "pub-789",
+			AltID:         "alt-789",
+			Title:         "Mastering Node.js: Build Scalable Applications",
+			UserID:        "user-003",
+			UserEmail:     "bob.wilson@example.com",
+			Type:          "loan",
+			Status:        "active",
+			Devices:       6,
 		},
 		{
-			ID:      "lic-004",
-			Title:   "CSS Grid and Flexbox: A Complete Guide",
-			User:    "alice.brown@example.com",
-			Type:    "buy",
-			Status:  "expired",
-			Devices: 3,
+			ID:            "lic-004",
+			PublicationID: "pub-101",
+			AltID:         "alt-101",
+			Title:         "CSS Grid and Flexbox: A Complete Guide",
+			UserID:        "user-004",
+			UserEmail:     "alice.brown@example.com",
+			Type:          "buy",
+			Status:        "expired",
+			Devices:       3,
 		},
 		{
-			ID:      "lic-005",
-			Title:   "Python for Data Science and Machine Learning",
-			User:    "charlie.davis@example.com",
-			Type:    "loan",
-			Status:  "active",
-			Devices: 7,
+			ID:            "lic-005",
+			PublicationID: "pub-212",
+			AltID:         "alt-212",
+			Title:         "Python for Data Science and Machine Learning",
+			UserID:        "user-005",
+			UserEmail:     "charlie.davis@example.com",
+			Type:          "loan",
+			Status:        "active",
+			Devices:       7,
 		},
 	}
 

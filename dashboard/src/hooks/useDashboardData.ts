@@ -21,8 +21,11 @@ export interface ChartDataPoint {
 
 export interface OversharedLicense {
   id: string;
+  publicationId: string;
+  altId: string;
   title: string;
-  user: string;
+  userId: string;
+  userEmail: string;
   type: "loan" | "buy";
   status: "ready" | "active" | "expired";
   devices: number;

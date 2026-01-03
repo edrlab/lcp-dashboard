@@ -180,10 +180,23 @@ export default function OversharedLicenses() {
                     <h3 className="text-lg font-semibold text-foreground line-clamp-2">
                       {license.title}
                     </h3>
+
+                    <div className="text-sm text-muted-foreground">
+                      <span>Publication ID: <span className="font-medium text-foreground">{license.publicationId}</span></span>
+                      <span className="mx-2">|</span>
+                      <span>Alt ID: <span className="font-medium text-foreground">{license.altId}</span></span>
+                    </div>
                     
                     <div className="flex flex-wrap gap-2 items-center text-sm">
-                      <span className="text-muted-foreground">User:</span>
-                      <span className="text-foreground font-medium">{license.user}</span>
+                      <span className="text-muted-foreground">
+                        {license.userEmail ? "User:" : "User ID:"}
+                      </span>
+                      {license.userEmail && (
+                        <span className="text-foreground font-medium">{license.userEmail}</span>
+                      )}
+                      <span className="text-foreground font-medium">
+                        {license.userEmail ? `(${license.userId})` : license.userId}
+                      </span>
                     </div>
                     
                     <div className="flex flex-wrap gap-3 items-center">

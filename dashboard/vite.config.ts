@@ -1,18 +1,18 @@
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 
-// Development configuration
-// Set USE_MOCK_DATA to true to use static data instead of real API calls
-// You can also set VITE_USE_MOCK_DATA=true in .env.local to override this
-const USE_MOCK_DATA = process.env.VITE_USE_MOCK_DATA === 'true' || false; // Change to false to use real API
-
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  const apiBaseUrl = process.env.VITE_API_BASE_URL || 'http://localhost:8989';
+  // Load env file based on `mode` in the current working directory.
+  const env = loadEnv(mode, process.cwd(), '');
+  const USE_MOCK_DATA = env.VITE_USE_MOCK_DATA === 'true' || false;
+  const apiBaseUrl = env.VITE_API_BASE_URL || 'http://localhost:8989';
+  
   console.log('🔧 API Base URL:', apiBaseUrl);
-  console.log('🔧 VITE_API_BASE_URL env var:', process.env.VITE_API_BASE_URL);
+  console.log('🔧 VITE_API_BASE_URL env var:', env.VITE_API_BASE_URL);
+  console.log('🔧 USE_MOCK_DATA:', USE_MOCK_DATA);
   
   return {
   server: {
@@ -25,8 +25,8 @@ export default defineConfig(({ mode }) => {
       'Expires': '0'
     },
     // Configuration proxy pour le développement (optionnel)
-    // Proxy only API routes, not frontend routes
-    proxy: {
+    // Proxy only API routes when not using mock data
+    proxy: USE_MOCK_DATA ? undefined : {
       '/dashdata/login': {
         target: apiBaseUrl,
         changeOrigin: true,

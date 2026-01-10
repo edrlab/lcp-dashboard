@@ -133,8 +133,6 @@ where `server` is the name of the LCP Server service in the multi-container app.
 
 ## Deployment, without docker
 
-### Frontend Deployment
-
 The built frontend (`dashboard/dist/`) can be deployed on:
 
 - **Static hosting**: Netlify, Vercel, GitHub Pages
@@ -162,18 +160,20 @@ server {
 
 ## Deployment using Docker
 
-### Building and testing lcp-dashboard arm64
-#### Building the Docker image
+### Build and test lcp-dashboard locally
+#### Build and tag the Docker image
 
 > cd ~/work/lcp/lcp-dashboard
 
-In nginx.conf, you should find
+In nginx.conf, you should activate
 proxy_pass http://host.docker.internal:8989;
 
-In the ./dashboard directory
+In the ./dashboard directory (e.g. for an arm64 platform)
 ```
-docker build --platform linux/arm64 -t llemeur/lcp-dashboard:latest-arm64 .
+docker build --platform linux/arm64 -t myregistry/lcp-dashboard:latest-arm64 .
 ```
+
+Where "myregistry" is the name of your Docker registry.
 
 #### Launch the test data server
 Launch the test server (on port 8989)
@@ -184,37 +184,31 @@ go run .
 
 #### Launch the container
 ```
-docker run -p 8090:8080 llemeur/lcp-dashboard:latest-arm64
+docker run -p 8090:8080 myregistry/lcp-dashboard:latest-arm64
 ```
 You will then be able to access your application at http://localhost:8090.
 
 Note: port 8090 is the one configured in the CORS headers of the test server (and the LCP v2 server), and it is the one used by the Vite test server of the dashboard. 
 
-### Build and test lcp-dashboard amd64
+### Build and deploy lcp-dashboard
 
-#### Build the Docker image
+#### Build and tag the Docker image
 
 > cd ~/work/lcp/lcp-dashboard
 
-In nginx.conf, you should find the service name of a dockerized LCP server:
+In nginx.conf, you should activate the service name of an LCP server container:
 proxy_pass http://server:8989;
-
-If you want to test the dockerized dasboard with a local LCP server, replace this command by the (currently commented) line:
-proxy_pass http://host.docker.internal:8989;
 
 From the ./dashboard directory, enter (if your target is an amd64 system):
 ```
-docker build --platform linux/amd64 -t llemeur/lcp-dashboard:latest-amd64 .
+docker build --platform linux/amd64 -t myregistry/lcp-dashboard:latest-amd64 .
 ```
 
-#### Tag the image
+#### Push the image to Docker Hub
 ```
-docker tag lcp-dashboard {your-docker-repo}/lcp-dashboard:latest-amd64
+docker push myregistry/lcp-dashboard:latest-amd64
 ```
-#### Push the amd64 image to Docker Hub
-```
-docker push {your-docker-repo}/lcp-dashboard:latest-amd64
-```
+
 #### Modify compose-vm.yaml on the LCP Server
 
 On the target system, compose.yaml must be modified to use the new dashboard image:
@@ -222,7 +216,7 @@ On the target system, compose.yaml must be modified to use the new dashboard ima
 ```yaml
 services:
     dashboard:
-        image: {your-docker-repo}/lcp-dashboard:latest-amd64
+        image: myregistry/lcp-dashboard:latest-amd64
         ports:
             - “8080:8080”
         depends_on:

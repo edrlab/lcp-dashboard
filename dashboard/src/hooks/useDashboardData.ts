@@ -31,6 +31,23 @@ export interface OversharedLicense {
   devices: number;
 }
 
+export interface Publication {
+  created_at: string;
+  provider?: string;
+  uuid: string;
+  alt_id?: string;
+  content_type: string;
+  title: string;
+  description?: string;
+  authors?: string;
+  publishers?: string;
+  cover_url?: string;
+  encryption_key: number[];
+  href: string;
+  size: number;
+  checksum: string;
+}
+
 export interface DashboardData {
   totalPublications: number;
   totalUsers: number;

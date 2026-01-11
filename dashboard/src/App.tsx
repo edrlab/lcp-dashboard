@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import OversharedLicenses from "./pages/OversharedLicenses";
+import Publications from "./pages/Publications";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -19,7 +20,7 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
@@ -36,6 +37,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <OversharedLicenses />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/publications" 
+              element={
+                <ProtectedRoute>
+                  <Publications />
                 </ProtectedRoute>
               } 
             />

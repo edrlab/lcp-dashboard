@@ -72,6 +72,13 @@ export default function Dashboard() {
             title="Total Publications"
             value={dashboardData.totalPublications}
             className="lg:col-span-1"
+            action={
+              <Link to="/publications">
+                <Button variant="outline" className="w-full bg-primary/10 text-primary border-primary/30 hover:bg-primary/20 hover:text-primary">
+                  View
+                </Button>
+              </Link>
+            }
           />
           
           {/* Total Users */}

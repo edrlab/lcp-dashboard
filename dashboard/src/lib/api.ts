@@ -8,6 +8,8 @@ export const API_CONFIG = {
     DASHBOARD: '/dashdata/data',
     OVERSHARED_LICENSES: '/dashdata/overshared',
     REVOKE_LICENSE: (licenseId: string) => `/dashdata/revoke/${licenseId}`,
+    PUBLICATIONS: (page: number = 1, perPage: number = 20) => `/dashdata/publications?page=${page}&per_page=${perPage}`,
+    DELETE_PUBLICATION: (uuid: string) => `/dashdata/publications/${uuid}`,
   }
 };
 

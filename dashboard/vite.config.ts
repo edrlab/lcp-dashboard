@@ -27,22 +27,7 @@ export default defineConfig(({ mode }) => {
     // Configuration proxy pour le développement (optionnel)
     // Proxy only API routes when not using mock data
     proxy: USE_MOCK_DATA ? undefined : {
-      '/dashdata/login': {
-        target: apiBaseUrl,
-        changeOrigin: true,
-        secure: false,
-      },
-      '/dashdata/data': {
-        target: apiBaseUrl,
-        changeOrigin: true,
-        secure: false,
-      },
-      '/dashdata/overshared': {
-        target: apiBaseUrl,
-        changeOrigin: true,
-        secure: false,
-      },
-      '/dashdata/revoke': {
+      '/dashdata': {
         target: apiBaseUrl,
         changeOrigin: true,
         secure: false,

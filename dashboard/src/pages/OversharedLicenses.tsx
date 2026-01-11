@@ -182,6 +182,8 @@ export default function OversharedLicenses() {
                     </h3>
 
                     <div className="text-sm text-muted-foreground">
+                      <span>License ID: <span className="font-medium text-foreground">{license.id}</span></span>
+                      <span className="mx-2">|</span>
                       <span>Publication ID: <span className="font-medium text-foreground">{license.publicationId}</span></span>
                       <span className="mx-2">|</span>
                       <span>Alt ID: <span className="font-medium text-foreground">{license.altId}</span></span>

@@ -33,7 +33,7 @@ const App = () => (
               } 
             />
             <Route 
-              path="/overshared" 
+              path="/dashboard/overshared" 
               element={
                 <ProtectedRoute>
                   <OversharedLicenses />
@@ -41,7 +41,7 @@ const App = () => (
               } 
             />
             <Route 
-              path="/publications" 
+              path="/dashboard/publications" 
               element={
                 <ProtectedRoute>
                   <Publications />

@@ -10,6 +10,8 @@ import (
 	"encoding/json"
 	"net/http"
 	"time"
+
+	"github.com/go-chi/chi/v5"
 )
 
 type Publication struct {
@@ -684,4 +686,42 @@ func Publications(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(publications[start:end])
+}
+
+var deleteCounter int
+
+func DeletePublication(w http.ResponseWriter, r *http.Request) {
+	uuid := chi.URLParam(r, "uuid")
+	
+	if uuid == "" {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{
+			"type":   "about:blank",
+			"title":  "Invalid request",
+			"detail": "UUID is required",
+		})
+		return
+	}
+	
+	// Alternate between success (200) and error (400)
+	deleteCounter++
+	if deleteCounter%2 == 0 {
+		// Return error on even calls
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{
+			"type":   "about:blank",
+			"title":  "Invalid request",
+			"detail": "publication has been deleted",
+		})
+		return
+	}
+	
+	// Return success on odd calls
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "Publication deleted successfully",
+	})
 }

@@ -69,7 +69,8 @@ func main() {
 	r.Group(func(r chi.Router) {
 		r.Use(authMiddleware)
 		r.Use(paginate)
-		r.Get("/publications", Publications)
+		r.Get("/dashdata/publications", Publications)
+		r.Delete("/dashdata/publications/{uuid}", DeletePublication)
 	})
 
 	// Start the server on port 8989

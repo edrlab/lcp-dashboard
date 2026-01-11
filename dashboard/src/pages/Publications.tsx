@@ -259,7 +259,7 @@ export default function Publications() {
                       <div className="flex flex-wrap gap-2 items-center">
                         <Badge variant="secondary" className="text-xs">
                           {publication.content_type === 'application/epub+zip' ? 'EPUB' : 
-                           publication.content_type === 'application/pdf' ? 'PDF' : 
+                           publication.content_type === 'application/pdf+lcp' ? 'PDF' : 
                            publication.content_type}
                         </Badge>
                       </div>

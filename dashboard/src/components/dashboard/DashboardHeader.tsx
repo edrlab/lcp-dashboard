@@ -1,13 +1,22 @@
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { LogOut, User } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 import appLogo from "@/assets/app-logo.png";
 
 export function DashboardHeader() {
   const { user, logout } = useAuth();
+  const location = useLocation();
 
   const handleSignOut = () => {
     logout();
+  };
+
+  const handleLogoClick = (e: React.MouseEvent) => {
+    if (location.pathname === '/dashboard') {
+      e.preventDefault();
+      window.location.reload();
+    }
   };
 
   return (
@@ -15,13 +24,17 @@ export function DashboardHeader() {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center space-x-3">
+          <Link 
+            to="/dashboard" 
+            onClick={handleLogoClick}
+            className="flex items-center space-x-3 hover:opacity-80 transition-opacity cursor-pointer"
+          >
             <img 
               src={appLogo} 
               alt="Dashboard Logo" 
               className="h-12 w-auto"
             />
-          </div>
+          </Link>
 
           {/* Title */}
           <div className="text-center">

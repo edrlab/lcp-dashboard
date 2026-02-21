@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -27,6 +28,30 @@ type LicenseStatus struct {
 type ChartDataPoint struct {
 	Month    string `json:"month"`
 	Licenses int    `json:"licenses"`
+}
+
+type LicenseInfo struct {
+	CreatedAt        time.Time `json:"CreatedAt"`
+	UpdatedAt        time.Time `json:"UpdatedAt"`
+	UUID             string    `json:"uuid"`
+	Provider         *string   `json:"provider,omitempty"`
+	UserID           string    `json:"user_id"`
+	Start            string    `json:"start"`
+	End              string    `json:"end"`
+	MaxEnd           *string   `json:"max_end,omitempty"`
+	Copy             int       `json:"copy"`
+	Print            int       `json:"print"`
+	Status           string    `json:"status"`
+	DeviceCount      int       `json:"device_count"`
+	PublicationID    string    `json:"publication_id"`
+	PublicationTitle string    `json:"publication_title"`
+}
+
+type Event struct {
+	Timestamp  string `json:"Timestamp"`
+	Type       string `json:"Type"`
+	DeviceName string `json:"DeviceName"`
+	DeviceID   string `json:"DeviceID"`
 }
 
 type DashboardData struct {
@@ -183,4 +208,180 @@ func RevokeLicense(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(response)
+}
+
+func UserLicenses(w http.ResponseWriter, r *http.Request) {
+	userID := chi.URLParam(r, "userID")
+	
+	log.Printf("🔍 Searching licenses for user: %s", userID)
+
+	// Generate mock license data based on userID
+	var licenses []LicenseInfo
+	
+	// For demonstration, create different scenarios based on userID
+	switch userID {
+	case "user123":
+		licenses = []LicenseInfo{
+			{
+				CreatedAt:        time.Now().AddDate(0, -2, 0),
+				UpdatedAt:        time.Now().AddDate(0, -1, 0),
+				UUID:             "license-001-user123",
+				Provider:         stringPtr("EDRLab"),
+				UserID:           userID,
+				Start:            "2024-01-15T00:00:00Z",
+				End:              "2024-12-31T23:59:59Z",
+				MaxEnd:           stringPtr("2025-01-31T23:59:59Z"),
+				Copy:             5,
+				Print:            10,
+				Status:           "active",
+				DeviceCount:      3,
+				PublicationID:    "pub-001",
+				PublicationTitle: "Introduction to Digital Publishing",
+			},
+			{
+				CreatedAt:        time.Now().AddDate(0, -1, 0),
+				UpdatedAt:        time.Now().AddDate(0, 0, -5),
+				UUID:             "license-002-user123",
+				UserID:           userID,
+				Start:            "2024-06-01T00:00:00Z",
+				End:              "2024-11-30T23:59:59Z",
+				Copy:             3,
+				Print:            5,
+				Status:           "expired",
+				DeviceCount:      2,
+				PublicationID:    "pub-002",
+				PublicationTitle: "Advanced eBook Technologies",
+			},
+		}
+	case "john.doe":
+		licenses = []LicenseInfo{
+			{
+				CreatedAt:        time.Now().AddDate(0, -3, 0),
+				UpdatedAt:        time.Now().AddDate(0, 0, -10),
+				UUID:             "license-003-johndoe",
+				Provider:         stringPtr("LibrarySystem"),
+				UserID:           userID,
+				Start:            "2024-03-01T00:00:00Z",
+				End:              "2025-03-01T00:00:00Z",
+				Copy:             10,
+				Print:            20,
+				Status:           "active",
+				DeviceCount:      5,
+				PublicationID:    "pub-003",
+				PublicationTitle: "Modern Library Management",
+			},
+		}
+	case "empty-user":
+		// Return empty array for this user
+		licenses = []LicenseInfo{}
+	default:
+		// For unknown users, return a few generic licenses
+		licenses = []LicenseInfo{
+			{
+				CreatedAt:        time.Now().AddDate(0, -1, -15),
+				UpdatedAt:        time.Now().AddDate(0, 0, -2),
+				UUID:             "license-default-001",
+				UserID:           userID,
+				Start:            "2024-07-01T00:00:00Z",
+				End:              "2024-12-15T23:59:59Z",
+				Copy:             2,
+				Print:            3,
+				Status:           "ready",
+				DeviceCount:      1,
+				PublicationID:    "pub-default",
+				PublicationTitle: "Sample Digital Content",
+			},
+		}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(licenses)
+}
+
+func LicenseEvents(w http.ResponseWriter, r *http.Request) {
+	licenseID := chi.URLParam(r, "licenseID")
+	
+	log.Printf("Fetching events for license: %s", licenseID)
+
+	// Generate mock events based on licenseID
+	var events []Event
+	
+	// For demonstration, create different event scenarios based on licenseID
+	switch {
+	case licenseID == "license-001-user123":
+		events = []Event{
+			{
+				Timestamp:  time.Now().AddDate(0, 0, -7).Format(time.RFC3339),
+				Type:       "register",
+				DeviceName: "John's iPad",
+				DeviceID:   "device-001",
+			},
+			{
+				Timestamp:  time.Now().AddDate(0, 0, -5).Format(time.RFC3339),
+				Type:       "return",
+				DeviceName: "John's iPad",
+				DeviceID:   "device-001",
+			},
+			{
+				Timestamp:  time.Now().AddDate(0, 0, -3).Format(time.RFC3339),
+				Type:       "register",
+				DeviceName: "John's iPhone",
+				DeviceID:   "device-002",
+			},
+		}
+	case licenseID == "license-002-user123":
+		events = []Event{
+			{
+				Timestamp:  time.Now().AddDate(0, 0, -10).Format(time.RFC3339),
+				Type:       "register",
+				DeviceName: "MacBook Pro",
+				DeviceID:   "device-003",
+			},
+			{
+				Timestamp:  time.Now().AddDate(0, 0, -1).Format(time.RFC3339),
+				Type:       "renew",
+				DeviceName: "MacBook Pro",
+				DeviceID:   "device-003",
+			},
+		}
+	case licenseID == "license-003-johndoe":
+		events = []Event{
+			{
+				Timestamp:  time.Now().AddDate(0, 0, -20).Format(time.RFC3339),
+				Type:       "register",
+				DeviceName: "Library Tablet 1",
+				DeviceID:   "lib-tablet-001",
+			},
+			{
+				Timestamp:  time.Now().AddDate(0, 0, -15).Format(time.RFC3339),
+				Type:       "register",
+				DeviceName: "Library Tablet 2", 
+				DeviceID:   "lib-tablet-002",
+			},
+			{
+				Timestamp:  time.Now().AddDate(0, 0, -10).Format(time.RFC3339),
+				Type:       "return",
+				DeviceName: "Library Tablet 1",
+				DeviceID:   "lib-tablet-001",
+			},
+		}
+	default:
+		// For unknown licenses, return basic events
+		events = []Event{
+			{
+				Timestamp:  time.Now().AddDate(0, 0, -2).Format(time.RFC3339),
+				Type:       "register",
+				DeviceName: "Unknown Device",
+				DeviceID:   "device-unknown",
+			},
+		}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(events)
+}
+
+// Helper function to create string pointers
+func stringPtr(s string) *string {
+	return &s
 }

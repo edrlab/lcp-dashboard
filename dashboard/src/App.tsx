@@ -10,6 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import OversharedLicenses from "./pages/OversharedLicenses";
 import Publications from "./pages/Publications";
+import UserSupport from "./pages/UserSupport";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -45,6 +46,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Publications />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/dashboard/user-support" 
+              element={
+                <ProtectedRoute>
+                  <UserSupport />
                 </ProtectedRoute>
               } 
             />

@@ -19,6 +19,30 @@ export interface ChartDataPoint {
   licenses: number;
 }
 
+export interface LicenseInfo {
+  CreatedAt: string;
+  UpdatedAt: string;
+  uuid: string;
+  provider?: string;
+  user_id: string;
+  start: string;
+  end: string;
+  max_end?: string;
+  copy: number;
+  print: number;
+  status: string;
+  device_count: number;
+  publication_id: string;
+  publication_title: string;
+}
+
+export interface Event {
+  Timestamp: string;
+  Type: string;
+  DeviceName: string;
+  DeviceID: string;
+}
+
 export interface OversharedLicense {
   id: string;
   publicationId: string;

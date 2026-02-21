@@ -86,6 +86,13 @@ export default function Dashboard() {
             title="Total Users"
             value={dashboardData.totalUsers}
             className="lg:col-span-1"
+            action={
+              <Link to="/dashboard/user-support">
+                <Button variant="outline" className="w-full bg-primary/10 text-primary border-primary/30 hover:bg-primary/20 hover:text-primary">
+                  Support
+                </Button>
+              </Link>
+            }
           />
           
           {/* Total Licenses */}

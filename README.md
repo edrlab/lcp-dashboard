@@ -16,6 +16,7 @@ This project is organized into two main components:
 - RESTful API server built with Go and Chi router  
 - JWT authentication system
 - License management endpoints
+- Publication management endpoints
 - CORS support for frontend integration
 
 ## Quick Start
@@ -251,6 +252,6 @@ Configure each component:
 ## History
 The LCP Server provides a monitoring API, but nobody ever proposed an open-source dashboard for it ... until now.
 
-This started as an experiment of vide-coding with Lovable. The codebase was then enhanced using vscode with Gemini (mostly 2.5 Pro). 
+This started as an experiment of vide-coding with Lovable. The codebase was then enhanced using vscode with Gemini, then Claude Sonnet 4.5. 
 
 The Test Server in Go is a minified version of the LCP Server V2, serving static data.  

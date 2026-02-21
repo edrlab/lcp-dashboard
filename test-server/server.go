@@ -64,6 +64,8 @@ func main() {
 		r.Get("/dashdata/data", Dashboard)
 		r.Get("/dashdata/overshared", OversharedLicenses)
 		r.Put("/dashdata/revoke/{licenseID}", RevokeLicense)
+		r.Get("/dashdata/user-licenses/{userID}", UserLicenses)
+		r.Get("/dashdata/license-events/{licenseID}", LicenseEvents)
 	})
 
 	r.Group(func(r chi.Router) {

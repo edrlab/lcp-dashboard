@@ -10,6 +10,8 @@ export const API_CONFIG = {
     REVOKE_LICENSE: (licenseId: string) => `/dashdata/revoke/${licenseId}`,
     PUBLICATIONS: (page: number = 1, perPage: number = 20) => `/dashdata/publications?page=${page}&per_page=${perPage}`,
     DELETE_PUBLICATION: (uuid: string) => `/dashdata/publications/${uuid}`,
+    USER_LICENSES_SEARCH: (userId: string) => `/dashdata/user-licenses/${encodeURIComponent(userId)}`,
+    LICENSE_EVENTS: (licenseId: string) => `/dashdata/license-events/${licenseId}`,
   }
 };
 

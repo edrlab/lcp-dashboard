@@ -32,8 +32,7 @@ export default function UserSupport() {
     data: events,
     isLoading: eventsLoading,
     error: eventsError,
-    refetch: refetchEvents
-  } = useLicenseEvents(selectedLicenseId || "", { enabled: false });
+  } = useLicenseEvents(selectedLicenseId || "", { enabled: !!selectedLicenseId });
 
   const handleSearch = async () => {
     if (!userIdentifier.trim()) {
@@ -55,7 +54,6 @@ export default function UserSupport() {
 
   const handleShowEvents = (licenseId: string) => {
     setSelectedLicenseId(licenseId);
-    refetchEvents();
   };
 
   return (
@@ -198,10 +196,10 @@ export default function UserSupport() {
                                           <TableBody>
                                             {events.map((event, index) => (
                                               <TableRow key={index}>
-                                                <TableCell>{new Date(event.Timestamp).toLocaleString()}</TableCell>
-                                                <TableCell>{event.Type}</TableCell>
-                                                <TableCell>{event.DeviceName || 'N/A'}</TableCell>
-                                                <TableCell className="font-mono text-sm">{event.DeviceID || 'N/A'}</TableCell>
+                                                <TableCell>{new Date(event.timestamp).toLocaleString()}</TableCell>
+                                                <TableCell>{event.type}</TableCell>
+                                                <TableCell>{event.device_name || 'N/A'}</TableCell>
+                                                <TableCell className="font-mono text-sm">{event.device_id || 'N/A'}</TableCell>
                                               </TableRow>
                                             ))}
                                           </TableBody>

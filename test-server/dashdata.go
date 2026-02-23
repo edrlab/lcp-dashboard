@@ -48,26 +48,26 @@ type LicenseInfo struct {
 }
 
 type Event struct {
-	Timestamp  string `json:"Timestamp"`
-	Type       string `json:"Type"`
-	DeviceName string `json:"DeviceName"`
-	DeviceID   string `json:"DeviceID"`
+	Timestamp  string `json:"timestamp"`
+	Type       string `json:"type"`
+	DeviceName string `json:"device_name"`
+	DeviceID   string `json:"device_id"`
 }
 
 type DashboardData struct {
-	TotalPublications       int               `json:"totalPublications"`
-	TotalUsers              int               `json:"totalUsers"`
-	TotalLicenses           int               `json:"totalLicenses"`
-	LicensesLast12Months    int               `json:"licensesLast12Months"`
-	LicensesLastMonth       int               `json:"licensesLastMonth"`
-	LicensesLastWeek        int               `json:"licensesLastWeek"`
-	LicensesLastDay         int               `json:"licensesLastDay"`
-	OldestLicenseDate       string            `json:"oldestLicenseDate"`
-	LatestLicenseDate       string            `json:"latestLicenseDate"`
-	OversharedLicensesCount int               `json:"oversharedLicensesCount"`
-	PublicationTypes        []PublicationType `json:"publicationTypes"`
-	LicenseStatuses         []LicenseStatus   `json:"licenseStatuses"`
-	ChartData               []ChartDataPoint  `json:"chartData"`
+	TotalPublications       int               `json:"total_publications"`
+	TotalUsers              int               `json:"total_users"`
+	TotalLicenses           int               `json:"total_licenses"`
+	LicensesLast12Months    int               `json:"licenses_last_12_months"`
+	LicensesLastMonth       int               `json:"licenses_last_month"`
+	LicensesLastWeek        int               `json:"licenses_last_week"`
+	LicensesLastDay         int               `json:"licenses_last_day"`
+	OldestLicenseDate       string            `json:"oldest_license_date"`
+	LatestLicenseDate       string            `json:"latest_license_date"`
+	OversharedLicensesCount int               `json:"overshared_licenses_count"`
+	PublicationTypes        []PublicationType `json:"publication_types"`
+	LicenseStatuses         []LicenseStatus   `json:"license_statuses"`
+	ChartData               []ChartDataPoint  `json:"chart_data"`
 }
 
 func Dashboard(w http.ResponseWriter, r *http.Request) {
@@ -119,11 +119,11 @@ json.NewEncoder(w).Encode(data)
 
 type OversharedLicenseData struct {
 ID            string `json:"id"`
-PublicationID string `json:"publicationId"`
-AltID         string `json:"altId"`
+PublicationID string `json:"publication_id"`
+AltID         string `json:"alt_id"`
 Title         string `json:"title"`
-UserID        string `json:"userId"`
-UserEmail     string `json:"userEmail"`
+UserID        string `json:"user_id"`
+UserEmail     string `json:"user_email"`
 Type          string `json:"type"`
 Status        string `json:"status"`
 Devices       int    `json:"devices"`

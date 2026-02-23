@@ -31,7 +31,7 @@ export function LicenseStatusBreakdown() {
     );
   }
 
-  if (error || !dashboardData?.licenseStatuses) {
+  if (error || !dashboardData?.license_statuses) {
     return (
       <Card className="p-6 bg-gradient-card border-stat-border">
         <div className="space-y-4">
@@ -42,7 +42,7 @@ export function LicenseStatusBreakdown() {
     );
   }
 
-  const licenseStatuses = dashboardData.licenseStatuses;
+  const licenseStatuses = dashboardData.license_statuses;
   const total = licenseStatuses.reduce((sum, status) => sum + status.count, 0);
 
   return (

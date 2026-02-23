@@ -17,7 +17,7 @@ export function LicenseChart() {
     );
   }
 
-  if (error || !dashboardData?.chartData) {
+  if (error || !dashboardData?.chart_data) {
     return (
       <Card className="p-6 bg-gradient-card border-stat-border col-span-full">
         <div className="space-y-4">
@@ -28,7 +28,7 @@ export function LicenseChart() {
     );
   }
 
-  const chartData = dashboardData.chartData;
+  const chartData = dashboardData.chart_data;
   return (
     <Card className="p-6 bg-gradient-card border-stat-border col-span-full">
       <div className="space-y-4">

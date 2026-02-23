@@ -31,7 +31,7 @@ export function PublicationBreakdown() {
     );
   }
 
-  if (error || !dashboardData?.publicationTypes) {
+  if (error || !dashboardData?.publication_types) {
     return (
       <Card className="p-6 bg-gradient-card border-stat-border">
         <div className="space-y-4">
@@ -42,7 +42,7 @@ export function PublicationBreakdown() {
     );
   }
 
-  const publicationTypes = dashboardData.publicationTypes;
+  const publicationTypes = dashboardData.publication_types;
   const total = publicationTypes.reduce((sum, type) => sum + type.count, 0);
 
   return (

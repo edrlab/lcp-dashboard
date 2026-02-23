@@ -9,6 +9,23 @@ export interface PublicationType {
   count: number;
 }
 
+export interface Publication {
+  created_at: string;
+  provider?: string;
+  uuid: string;
+  alt_id?: string;
+  content_type: string;
+  title: string;
+  description?: string;
+  authors?: string;
+  publishers?: string;
+  cover_url?: string;
+  encryption_key: number[];
+  href: string;
+  size: number;
+  checksum: string;
+}
+
 export interface LicenseStatus {
   name: string;
   count: number;
@@ -37,55 +54,38 @@ export interface LicenseInfo {
 }
 
 export interface Event {
-  Timestamp: string;
-  Type: string;
-  DeviceName: string;
-  DeviceID: string;
+  timestamp: string;
+  type: string;
+  device_name: string;
+  device_id: string;
 }
 
 export interface OversharedLicense {
   id: string;
-  publicationId: string;
-  altId: string;
+  publication_id: string;
+  alt_id: string;
   title: string;
-  userId: string;
-  userEmail: string;
+  user_id: string;
+  user_email: string;
   type: "loan" | "buy";
   status: "ready" | "active" | "expired";
   devices: number;
 }
 
-export interface Publication {
-  created_at: string;
-  provider?: string;
-  uuid: string;
-  alt_id?: string;
-  content_type: string;
-  title: string;
-  description?: string;
-  authors?: string;
-  publishers?: string;
-  cover_url?: string;
-  encryption_key: number[];
-  href: string;
-  size: number;
-  checksum: string;
-}
-
 export interface DashboardData {
-  totalPublications: number;
-  totalUsers: number;
-  totalLicenses: number;
-  licensesLast12Months: number;
-  licensesLastMonth: number;
-  licensesLastWeek: number;
-  licensesLastDay: number;
-  oldestLicenseDate: string;
-  latestLicenseDate: string;
-  oversharedLicensesCount: number;
-  publicationTypes: PublicationType[];
-  licenseStatuses: LicenseStatus[];
-  chartData: ChartDataPoint[];
+  total_publications: number;
+  total_users: number;
+  total_licenses: number;
+  licenses_last_12_months: number;
+  licenses_last_month: number;
+  licenses_last_week: number;
+  licenses_last_day: number;
+  oldest_license_date: string;
+  latest_license_date: string;
+  overshared_licenses_count: number;
+  publication_types: PublicationType[];
+  license_statuses: LicenseStatus[];
+  chart_data: ChartDataPoint[];
 }
 
 const fetchDashboardData = async (): Promise<DashboardData> => {

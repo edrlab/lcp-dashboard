@@ -70,7 +70,7 @@ export default function Dashboard() {
           {/* Total Publications */}
           <StatCard
             title="Total Publications"
-            value={dashboardData.totalPublications}
+            value={dashboardData.total_publications}
             className="lg:col-span-1"
             action={
               <Link to="/dashboard/publications">
@@ -84,7 +84,7 @@ export default function Dashboard() {
           {/* Total Users */}
           <StatCard
             title="Total Users"
-            value={dashboardData.totalUsers}
+            value={dashboardData.total_users}
             className="lg:col-span-1"
             action={
               <Link to="/dashboard/user-support">
@@ -98,7 +98,7 @@ export default function Dashboard() {
           {/* Total Licenses */}
           <StatCard
             title="Total Licenses"
-            value={dashboardData.totalLicenses}
+            value={dashboardData.total_licenses}
             subtitle="Since Launch"
             className="lg:col-span-1"
           />
@@ -106,7 +106,7 @@ export default function Dashboard() {
           {/* License Metrics */}
           <StatCard
             title="Last 12 months"
-            value={dashboardData.licensesLast12Months}
+            value={dashboardData.licenses_last_12_months}
             subtitle="licenses generated"
             trend="up"
             className="lg:col-span-1"
@@ -114,7 +114,7 @@ export default function Dashboard() {
           
           <StatCard
             title="Last Month"
-            value={dashboardData.licensesLastMonth}
+            value={dashboardData.licenses_last_month}
             subtitle="licenses generated"
             trend="up"
             className="lg:col-span-1"
@@ -122,7 +122,7 @@ export default function Dashboard() {
           
           <StatCard
             title="Last week"
-            value={dashboardData.licensesLastWeek}
+            value={dashboardData.licenses_last_week}
             subtitle="licenses generated"
             trend="up"
             className="lg:col-span-1"
@@ -130,7 +130,7 @@ export default function Dashboard() {
           
           <StatCard
             title="Last Day"
-            value={dashboardData.licensesLastDay}
+            value={dashboardData.licenses_last_day}
             subtitle="licenses generated"
             trend="up"
             className="lg:col-span-1"
@@ -139,7 +139,7 @@ export default function Dashboard() {
           {/* Overshared Licenses with Link */}
           <StatCard
             title="Overshared Licenses"
-            value={dashboardData.oversharedLicensesCount}
+            value={dashboardData.overshared_licenses_count}
             className="lg:col-span-1"
             action={
               <Link to="/dashboard/overshared">
@@ -166,14 +166,14 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <StatCard
             title="Oldest License Generated"
-            value={dashboardData.oldestLicenseDate}
+            value={dashboardData.oldest_license_date}
             subtitle="First license on record"
             className="text-left"
           />
           
           <StatCard
             title="Latest License Generated"
-            value={dashboardData.latestLicenseDate}
+            value={dashboardData.latest_license_date}
             subtitle="Most recent license"
           />
         </div>

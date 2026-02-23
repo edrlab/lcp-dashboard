@@ -184,20 +184,20 @@ export default function OversharedLicenses() {
                     <div className="text-sm text-muted-foreground">
                       <span>License ID: <span className="font-medium text-foreground">{license.id}</span></span>
                       <span className="mx-2">|</span>
-                      <span>Publication ID: <span className="font-medium text-foreground">{license.publicationId}</span></span>
+                      <span>Publication ID: <span className="font-medium text-foreground">{license.publication_id}</span></span>
                       <span className="mx-2">|</span>
-                      <span>Alt ID: <span className="font-medium text-foreground">{license.altId}</span></span>
+                      <span>Alt ID: <span className="font-medium text-foreground">{license.alt_id}</span></span>
                     </div>
                     
                     <div className="flex flex-wrap gap-2 items-center text-sm">
                       <span className="text-muted-foreground">
-                        {license.userEmail ? "User:" : "User ID:"}
+                        {license.user_email ? "User:" : "User ID:"}
                       </span>
-                      {license.userEmail && (
-                        <span className="text-foreground font-medium">{license.userEmail}</span>
+                      {license.user_email && (
+                        <span className="text-foreground font-medium">{license.user_email}</span>
                       )}
                       <span className="text-foreground font-medium">
-                        {license.userEmail ? `(${license.userId})` : license.userId}
+                        {license.user_email ? `(${license.user_id})` : license.user_id}
                       </span>
                     </div>
                     

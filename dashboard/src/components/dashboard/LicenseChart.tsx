@@ -2,9 +2,17 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { useDashboardData } from "@/hooks/useDashboardData";
+import { LicenseReportDialog } from "@/components/dashboard/LicenseReportDialog";
 
 export function LicenseChart() {
   const { data: dashboardData, isLoading, error } = useDashboardData();
+
+  const reportHeader = (
+    <div className="flex items-center justify-between gap-4">
+      <h3 className="text-lg font-semibold text-foreground">License Generation Trends (Activated only)</h3>
+      <LicenseReportDialog />
+    </div>
+  );
 
   if (isLoading) {
     return (
@@ -21,7 +29,7 @@ export function LicenseChart() {
     return (
       <Card className="p-6 bg-gradient-card border-stat-border col-span-full">
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-foreground">License Generation Trends</h3>
+          {reportHeader}
           <p className="text-muted-foreground">Failed to load chart data</p>
         </div>
       </Card>
@@ -32,7 +40,7 @@ export function LicenseChart() {
   return (
     <Card className="p-6 bg-gradient-card border-stat-border col-span-full">
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-foreground">License Generation Trends</h3>
+        {reportHeader}
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>

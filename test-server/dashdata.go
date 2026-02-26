@@ -7,7 +7,9 @@
 package main
 
 import (
+	"encoding/csv"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -115,6 +117,44 @@ func Dashboard(w http.ResponseWriter, r *http.Request) {
 
 w.Header().Set("Content-Type", "application/json")
 json.NewEncoder(w).Encode(data)
+}
+
+func ReportLicenses(w http.ResponseWriter, r *http.Request) {
+	month := r.URL.Query().Get("month")
+	if month == "" {
+		http.Error(w, "month query parameter is required (YYYY-MM)", http.StatusBadRequest)
+		return
+	}
+
+	parsedMonth, err := time.Parse("2006-01", month)
+	if err != nil {
+		http.Error(w, "invalid month format, expected YYYY-MM", http.StatusBadRequest)
+		return
+	}
+
+	w.Header().Set("Content-Type", "text/csv")
+	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=licenses-report-%s.csv", month))
+
+	writer := csv.NewWriter(w)
+	defer writer.Flush()
+
+	if err := writer.Write([]string{"license_id", "publication_id", "user_id", "status", "created_at"}); err != nil {
+		http.Error(w, "failed to write csv header", http.StatusInternalServerError)
+		return
+	}
+
+	rows := [][]string{
+		{"lic-101", "pub-123", "user-001", "active", parsedMonth.Format("2006-01-05")},
+		{"lic-102", "pub-456", "user-002", "expired", parsedMonth.AddDate(0, 0, 8).Format("2006-01-05")},
+		{"lic-103", "pub-789", "user-003", "ready", parsedMonth.AddDate(0, 0, 15).Format("2006-01-05")},
+	}
+
+	for _, row := range rows {
+		if err := writer.Write(row); err != nil {
+			http.Error(w, "failed to write csv row", http.StatusInternalServerError)
+			return
+		}
+	}
 }
 
 type OversharedLicenseData struct {

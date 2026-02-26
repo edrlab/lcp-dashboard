@@ -62,6 +62,7 @@ func main() {
 	r.Group(func(r chi.Router) {
 		r.Use(authMiddleware)
 		r.Get("/dashdata/data", Dashboard)
+		r.Get("/dashdata/report-licenses", ReportLicenses)
 		r.Get("/dashdata/overshared", OversharedLicenses)
 		r.Put("/dashdata/revoke/{licenseID}", RevokeLicense)
 		r.Get("/dashdata/user-licenses/{userID}", UserLicenses)

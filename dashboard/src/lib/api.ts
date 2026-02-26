@@ -6,6 +6,7 @@ export const API_CONFIG = {
   ENDPOINTS: {
     LOGIN: '/dashdata/login',
     DASHBOARD: '/dashdata/data',
+    REPORT_LICENSES: (month: string) => `/dashdata/report-licenses?month=${encodeURIComponent(month)}`,
     OVERSHARED_LICENSES: '/dashdata/overshared',
     REVOKE_LICENSE: (licenseId: string) => `/dashdata/revoke/${licenseId}`,
     PUBLICATIONS: (page: number = 1, perPage: number = 20) => `/dashdata/publications?page=${page}&per_page=${perPage}`,
